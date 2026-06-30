@@ -21,6 +21,7 @@ dependencies:
   go_router: ^17.3.0
   flutter_svg: ^2.3.0
   flutter_bloc: ^8.1.6
+  responsive_framework: ^1.5.1
 
 
 
@@ -30,3 +31,13 @@ flutter:
   assets:
     - images/svg/
     - images/png/
+
+  fonts:
+    - family: AvenirArabic
+      fonts:
+        - asset: fonts/Linotype - Avenir Arabic Regular.otf
+          weight: 400
+        - asset: fonts/Linotype - Avenir Arabic Light.otf
+          weight: 300
+        - asset: fonts/Linotype - Avenir Arabic Heavy.otf
+          weight: 700
