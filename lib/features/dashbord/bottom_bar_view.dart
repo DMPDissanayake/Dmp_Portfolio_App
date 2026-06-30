@@ -127,7 +127,6 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  // Navigation Items ටික කෝඩ් එක double නොවෙන්න එක තැනකට ගත්තා
   List<Widget> _getNavItems() {
     return [
       BottomBarItem(
@@ -137,25 +136,25 @@ class _DashboardViewState extends State<DashboardView> {
         isSelected: selectedTab == 0,
       ),
       BottomBarItem(
-        name: 'Courses',
+        name: 'Skills',
         selectedIcon: AppImages.svgSkills,
         onTap: () => changeTab(1),
         isSelected: selectedTab == 1,
       ),
       BottomBarItem(
-        name: 'Grades',
+        name: 'Projects',
         selectedIcon: AppImages.svgProject,
         onTap: () => changeTab(2),
         isSelected: selectedTab == 2,
       ),
       BottomBarItem(
-        name: 'Profile',
+        name: 'Education',
         selectedIcon: AppImages.svgEducation,
         onTap: () => changeTab(3),
         isSelected: selectedTab == 3,
       ),
       BottomBarItem(
-        name: 'About', // කලින් 'Profile' කියලා දෙපාරක් තිබ්බ නිසා 'About' කලා
+        name: 'Profile',
         selectedIcon: AppImages.svgProfile,
         onTap: () => changeTab(4),
         isSelected: selectedTab == 4,

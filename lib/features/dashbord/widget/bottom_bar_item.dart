@@ -47,7 +47,7 @@ class BottomBarItem extends StatelessWidget {
             SizedBox(height: 2.h),
             SvgPicture.asset(
               selectedIcon,
-              height: 25.h,
+              height: 20.h,
               color: isSelected
                   ? AppColors.initColors().primaryColor
                   : AppColors.initColors().bottomNavigationBarUnselectColor,
@@ -56,8 +56,8 @@ class BottomBarItem extends StatelessWidget {
             Text(
               name ?? '',
               style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: AppDimensions.kFontSize11,
+                fontWeight: FontWeight.w700,
+                fontSize: AppDimensions.kFontSize10,
                 letterSpacing: AppDimensions.kLetterSpacing12(-2.5),
                 height: AppDimensions.kLineHeight12(18),
                 color: isSelected
@@ -66,7 +66,6 @@ class BottomBarItem extends StatelessWidget {
               ),
             ),
             // Added small padding at bottom to keep text from touching the edge
-            SizedBox(height: 5.h),
           ],
         ),
       ),

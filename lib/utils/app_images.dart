@@ -2,6 +2,7 @@ class AppImages {
   /// PNG
   // static const String icVisible = 'images/png/ic_visible.png';
   // static const String icVisibilityOff = 'images/png/ic_visibility_off.png';
+  static const String homeBenner = 'images/png/home_benner.png';
 
   /// SVG
   static const String svgHome = 'images/svg/svg_home.svg';
@@ -11,5 +12,6 @@ class AppImages {
   static const String svgProfile = 'images/svg/svg_profile.svg';
 
   /// Animetion
-  //static const String registration = 'images/animation/registration.json';
+  static const String mADevelopment =
+      'images/animation/mobile application development.json';
 }
