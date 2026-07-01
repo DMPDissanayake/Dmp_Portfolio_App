@@ -24,7 +24,7 @@ dependencies:
   responsive_framework: ^1.5.1
   lottie: ^3.3.3
   fl_chart: ^0.68.0
-  visibility_detector: ^0.4.1
+  visibility_detector: ^0.4.0+2
 
 
 

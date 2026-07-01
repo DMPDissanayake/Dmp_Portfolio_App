@@ -210,7 +210,8 @@ class _PremiumSkillLineChartState extends State<PremiumSkillLineChart>
     int index = value.toInt();
     if (index >= 0 && index < widget.skills.length) {
       return SideTitleWidget(
-        meta: meta,
+        axisSide: meta.axisSide,
+        angle: -math.pi / -10,
         space: 8,
         // Rotated via Transform widget wrapper inside a sized boundary block
         child: Transform.rotate(
@@ -232,7 +233,7 @@ class _PremiumSkillLineChartState extends State<PremiumSkillLineChart>
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(color: Color(0xff64748b), fontSize: 12);
     return SideTitleWidget(
-      meta: meta,
+      axisSide: meta.axisSide,
       space: 10,
       child: Text('${value.toInt()}%', style: style),
     );

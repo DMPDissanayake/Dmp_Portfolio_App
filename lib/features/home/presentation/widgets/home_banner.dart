@@ -24,10 +24,12 @@ class _HomeBannerState extends State<HomeBanner> {
           image: AssetImage(AppImages.homeBenner),
           fit: BoxFit.cover,
         ),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          width: 1.w,
-          color: AppColors.initColors().primaryColor,
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(36.r)),
+        border: Border(
+          bottom: BorderSide(
+            width: 1.w,
+            color: AppColors.initColors().primaryColor,
+          ),
         ),
         boxShadow: [
           BoxShadow(
@@ -69,7 +71,7 @@ class _HomeBannerState extends State<HomeBanner> {
                   ),
                 ),
                 //SizedBox(height: 8.h),
-                Lottie.asset(AppImages.mADevelopment, height: 60.h),
+                Lottie.asset(AppImages.mADevelopment, height: 70.h),
               ],
             ),
           ),
@@ -91,8 +93,8 @@ class _HomeBannerState extends State<HomeBanner> {
               borderRadius: BorderRadius.circular(100.r),
               child: Image.network(
                 'https://drive.google.com/uc?export=view&id=1II6ejrixHINsooflYoj9ywSikM-kL0XZ',
-                height: 60.h,
-                width: 60.w,
+                height: 90.h,
+                width: 90.w,
                 fit: BoxFit.cover,
               ),
             ),
