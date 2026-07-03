@@ -6,6 +6,7 @@ class AppColors {
   AppColors({
     required this.primaryColor,
     required this.appBGColor,
+    required this.tabBarColor,
     required this.textBlackColor1,
     required this.appButtonColor,
     required this.whiteBackgroundColor,
@@ -21,6 +22,7 @@ class AppColors {
 
   Color primaryColor;
   LinearGradient appBGColor;
+  LinearGradient tabBarColor;
   Color appButtonColor;
   Color textBlackColor1;
   Color whiteBackgroundColor;
@@ -53,6 +55,11 @@ class AppColors {
           Color(0xFFffffff), // 100%
         ],
       ),
+      tabBarColor: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFFFFFFF), Color(0xFFFFFCF2), Color(0xFFFFF4D6)],
+      ),
       appButtonColor: const Color(0xFF004643),
       textBlackColor1: const Color(0xFF2B2B2B),
       desabledAppButtonColor: const Color.fromARGB(92, 0, 70, 67),
@@ -77,6 +84,11 @@ class AppColors {
           Color(0xFFFFB400), // 0%
           Color(0xFFffffff), // 100%
         ],
+      ),
+      tabBarColor: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFFFF8E1), Color(0xFFFFD54F), Color(0xFFFFB400)],
       ),
       appButtonColor: const Color(0xFF004643),
       textBlackColor1: const Color(0xFF2B2B2B),
