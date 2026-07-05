@@ -19,6 +19,7 @@ class AppImages {
   static const String svgEv = 'images/svg/svg_ev.svg';
   static const String svgUrl = 'images/svg/svg_url.svg';
   static const String svgGithub = 'images/svg/svg_github.svg';
+  static const String svgMobileDelopment = 'images/svg/svg_mobile_dev.svg';
 
   /// Animetion
   static const String mADevelopment =

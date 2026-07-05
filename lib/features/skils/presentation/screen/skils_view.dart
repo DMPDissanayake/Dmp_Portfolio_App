@@ -1,8 +1,11 @@
 import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_bloc.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/professional_skills_card.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/techical_skills_card.dart';
 import 'package:dmpportfolioapp/shared/common/custom_segmented_control_widget.dart';
 import 'package:dmpportfolioapp/shared/common/custom_tab_bar_widget.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
+import 'package:dmpportfolioapp/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,41 +79,94 @@ class _SkilsViewState extends State<SkilsView> {
                           SizedBox(height: 16.h),
                           if (_selectedIndex == 0)
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Technical Skills',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: AppDimensions.kFontSize14,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
-                                      color: AppColors.initColors()
-                                          .textBlackColor1,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Mobile Development',
+                                      skillsList: [
+                                        'Flutter',
+                                        'Dart',
+                                        'Android Development',
+                                        'Android Native',
+                                        'Responsive UI Development',
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 16.h),
-                                ],
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'State Management',
+                                      skillsList: [
+                                        'BLoC',
+                                        'Provider',
+                                        'Riverpod',
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Architecture',
+                                      skillsList: [
+                                        'Clean Architecture',
+                                        'Repository Pattern',
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Backend & APIs',
+                                      skillsList: [
+                                        'REST API Integration',
+                                        'Firebase Authentication',
+                                        'Firebase Firestore',
+                                        'Push Notifications',
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Local Storage',
+                                      skillsList: [
+                                        'Hive',
+                                        'Hive',
+                                        'Android Development',
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Tools & Platforms',
+                                      skillsList: [
+                                        'Git & GitHub',
+                                        'Android Studio',
+                                        'VS Code',
+                                        'Postman',
+                                        'FlutterFire CLI',
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    TechicalSkillsCard(
+                                      icon: AppImages.svgMobileDelopment,
+                                      title: 'Testing & QA',
+                                      skillsList: [
+                                        'Manual Testing',
+                                        'Debugging',
+                                        'Widget Testing',
+                                        'API Testing',
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           if (_selectedIndex == 1)
                             Expanded(
                               child: Column(
                                 children: [
-                                  Text(
-                                    'Professional Skills',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: AppDimensions.kFontSize14,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
-                                      color: AppColors.initColors()
-                                          .textBlackColor1,
-                                    ),
-                                  ),
+                                  ProfessionalSkillsCard(),
                                   SizedBox(height: 16.h),
                                 ],
                               ),
