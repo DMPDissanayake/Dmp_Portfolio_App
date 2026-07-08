@@ -14,17 +14,17 @@ class WorkExperienceCard extends StatelessWidget {
     return Container(
       // Removed width: double.infinity to let Expanded safely manage layout constraints
       decoration: BoxDecoration(
-        color: AppColors.initColors().nonChangeWhite,
+        color: AppColors.initColors().nonChangeWhite.withOpacity(0.5),
         borderRadius: BorderRadius.circular(
           16.r,
         ), // Standard matching corner curves
         border: Border.all(
           width: 1,
-          color: AppColors.initColors().primaryColor.withOpacity(0.25),
+          color: AppColors.initColors().nonChangeWhite.withOpacity(0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.initColors().nonChangeBlack.withOpacity(0.06),
+            color: AppColors.initColors().nonChangeBlack.withOpacity(0.12),
             offset: const Offset(0, 4),
             blurRadius: 16,
           ),
