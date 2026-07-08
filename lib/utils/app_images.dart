@@ -35,6 +35,8 @@ class AppImages {
   static const String svgCompany = 'images/svg/svg_company.svg';
   static const String svgUniversity = 'images/svg/svg_university.svg';
   static const String svgCertification = 'images/svg/svg_certification.svg';
+  static const String svgContact = 'images/svg/svg_contact.svg';
+  static const String svgDownload = 'images/svg/images/svg/svg_download.svg';
 
   /// Animetion
   static const String mADevelopment =
