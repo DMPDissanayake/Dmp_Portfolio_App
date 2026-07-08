@@ -92,7 +92,7 @@ class _DashboardViewState extends State<DashboardView> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _getNavItems(),
+        children: _getNavItems().map((item) => Expanded(child: item)).toList(),
       ),
     );
   }
@@ -100,7 +100,7 @@ class _DashboardViewState extends State<DashboardView> {
   // --- Web / Desktop Side Menu ---
   Widget _buildSideMenu() {
     return Container(
-      width: 250.w, // Side menu එකට ගැලපෙන පළලක් (Width) මෙතනින් දෙන්න
+      width: 240, // Side menu එකට ගැලපෙන පළලක් (Width) මෙතනින් දෙන්න
       color: AppColors.initColors().nonChangeWhite,
       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
       child: Column(
@@ -108,7 +108,7 @@ class _DashboardViewState extends State<DashboardView> {
         children: [
           // App Logo එක හෝ Title එක මෙතනට දාන්න පුළුවන්
           Padding(
-            padding: EdgeInsets.all(10.w),
+            padding: EdgeInsets.all(10),
             child: Text(
               "Portfolio",
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),

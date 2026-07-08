@@ -124,7 +124,7 @@ class ProfileDeteileCard extends StatelessWidget {
                     textColor: AppColors.initColors().nonChangeWhite,
                     prefixIcon: SvgPicture.asset(
                       AppImages.svgDownload,
-                      height: 10.h,
+                      height: 18.h,
                       color: AppColors.initColors().nonChangeWhite,
                     ),
                   ),
@@ -136,10 +136,13 @@ class ProfileDeteileCard extends StatelessWidget {
                     hasBorder: true,
 
                     onTapButton: () {},
-                    prefixIcon: SvgPicture.asset(
-                      AppImages.svgDownload,
-                      height: 10.h,
-                      color: AppColors.initColors().nonChangeWhite,
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: SvgPicture.asset(
+                        AppImages.svgContact,
+                        height: 18.h,
+                        color: AppColors.initColors().nonChangeBlack,
+                      ),
                     ),
                   ),
                 ),

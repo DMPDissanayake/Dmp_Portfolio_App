@@ -41,7 +41,7 @@ class _HomeBannerState extends State<HomeBanner> {
         ],
       ),
       child: Row(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Column(
@@ -75,27 +75,29 @@ class _HomeBannerState extends State<HomeBanner> {
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
+          Flexible(
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
 
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.initColors().nonChangeBlack.withOpacity(
-                    0.15,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.initColors().nonChangeBlack.withOpacity(
+                      0.15,
+                    ),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
                   ),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100.r),
+                child: Image.network(
+                  'https://drive.google.com/uc?export=view&id=1II6ejrixHINsooflYoj9ywSikM-kL0XZ',
+                  height: 90.h,
+                  width: 90.w,
+                  fit: BoxFit.cover,
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100.r),
-              child: Image.network(
-                'https://drive.google.com/uc?export=view&id=1II6ejrixHINsooflYoj9ywSikM-kL0XZ',
-                height: 90.h,
-                width: 90.w,
-                fit: BoxFit.cover,
               ),
             ),
           ),

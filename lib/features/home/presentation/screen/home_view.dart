@@ -160,16 +160,18 @@ class _HomeViewState extends State<HomeView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'My Skills',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: AppDimensions.kFontSize14,
-                                  height: AppDimensions.kLineHeight14(18),
-                                  letterSpacing: AppDimensions.kLetterSpacing14(
-                                    -2.5,
+                              Expanded(
+                                child: Text(
+                                  'My Skills',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AppDimensions.kFontSize14,
+                                    height: AppDimensions.kLineHeight14(18),
+                                    letterSpacing:
+                                        AppDimensions.kLetterSpacing14(-2.5),
+                                    color:
+                                        AppColors.initColors().textBlackColor1,
                                   ),
-                                  color: AppColors.initColors().textBlackColor1,
                                 ),
                               ),
                               InkWell(
@@ -207,8 +209,10 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           SizedBox(height: 8.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            spacing: 8.w,
+                            runSpacing: 8.h,
                             children: [
                               AccessCard(
                                 name: 'Technical',
@@ -243,16 +247,18 @@ class _HomeViewState extends State<HomeView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Featured Projects',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: AppDimensions.kFontSize14,
-                              height: AppDimensions.kLineHeight14(18),
-                              letterSpacing: AppDimensions.kLetterSpacing14(
-                                -2.5,
+                          Expanded(
+                            child: Text(
+                              'Featured Projects',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: AppDimensions.kFontSize14,
+                                height: AppDimensions.kLineHeight14(18),
+                                letterSpacing: AppDimensions.kLetterSpacing14(
+                                  -2.5,
+                                ),
+                                color: AppColors.initColors().textBlackColor1,
                               ),
-                              color: AppColors.initColors().textBlackColor1,
                             ),
                           ),
                           InkWell(
@@ -311,16 +317,18 @@ class _HomeViewState extends State<HomeView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Technical Skills',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: AppDimensions.kFontSize14,
-                                  height: AppDimensions.kLineHeight14(18),
-                                  letterSpacing: AppDimensions.kLetterSpacing14(
-                                    -2.5,
+                              Expanded(
+                                child: Text(
+                                  'Technical Skills',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AppDimensions.kFontSize14,
+                                    height: AppDimensions.kLineHeight14(18),
+                                    letterSpacing:
+                                        AppDimensions.kLetterSpacing14(-2.5),
+                                    color:
+                                        AppColors.initColors().textBlackColor1,
                                   ),
-                                  color: AppColors.initColors().textBlackColor1,
                                 ),
                               ),
                               InkWell(
