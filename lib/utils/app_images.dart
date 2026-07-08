@@ -33,6 +33,8 @@ class AppImages {
   static const String svgTime = 'images/svg/svg_time.svg';
   static const String svgAI = 'images/svg/svg_ai.svg';
   static const String svgCompany = 'images/svg/svg_company.svg';
+  static const String svgUniversity = 'images/svg/svg_university.svg';
+  static const String svgCertification = 'images/svg/svg_certification.svg';
 
   /// Animetion
   static const String mADevelopment =
