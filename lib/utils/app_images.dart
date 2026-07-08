@@ -20,6 +20,19 @@ class AppImages {
   static const String svgUrl = 'images/svg/svg_url.svg';
   static const String svgGithub = 'images/svg/svg_github.svg';
   static const String svgMobileDelopment = 'images/svg/svg_mobile_dev.svg';
+  static const String svgAdaptability = 'images/svg/svg_Adaptability.svg';
+  static const String svgAgile = 'images/svg/svg_agile.svg';
+  static const String svgAttention = 'images/svg/svg_attention.svg';
+  static const String svgClient = 'images/svg/svg_client.svg';
+  static const String svgCommunication = 'images/svg/svg_communication.svg';
+  static const String svgLeadership = 'images/svg/svg_leadership.svg';
+  static const String svgLearning2 = 'images/svg/svg_learning2.svg';
+  static const String svgProblemsolving = 'images/svg/svg_problemsolving.svg';
+  static const String svgRequirement = 'images/svg/svg_requirement.svg';
+  static const String svgTeam = 'images/svg/svg_team.svg';
+  static const String svgTime = 'images/svg/svg_time.svg';
+  static const String svgAI = 'images/svg/svg_ai.svg';
+  static const String svgCompany = 'images/svg/svg_company.svg';
 
   /// Animetion
   static const String mADevelopment =

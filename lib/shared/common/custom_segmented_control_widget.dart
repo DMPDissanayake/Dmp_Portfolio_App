@@ -72,54 +72,59 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
       ),
       child: Row(
         children: widget.tabs.map((tab) {
-          bool isSelected = widget.selectedId == tab.id;
+          final bool isSelected = widget.selectedId == tab.id;
+
+          // 1. Build the base container for the tab
+          Widget tabContent = AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: isSelected ? AppColors.initColors().tabBarColor : null,
+              color: isSelected ? null : AppColors.initColors().primaryColor,
+              borderRadius: BorderRadius.circular(8.r),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.initColors().nonChangeBlack
+                            .withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : [],
+            ),
+            child: Text(
+              tab.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: AppDimensions.kFontSize14,
+                height: AppDimensions.kLineHeight14(20),
+                letterSpacing: AppDimensions.kLetterSpacing14(0),
+                color: isSelected
+                    ? AppColors.initColors().primaryColor
+                    : AppColors.initColors().nonChangeWhite,
+              ),
+            ),
+          );
+
+          // 2. ONLY wrap with the scale animation builder if the tab is selected
+          if (isSelected) {
+            tabContent = AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: child,
+                );
+              },
+              child: tabContent,
+            );
+          }
 
           return Expanded(
             child: GestureDetector(
               onTap: () => widget.onTabSelected(tab),
-              child: AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: isSelected ? _scaleAnimation.value : 1.0,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: isSelected
-                            ? AppColors.initColors().tabBarColor
-                            : null,
-                        color: isSelected
-                            ? null
-                            : AppColors.initColors().primaryColor,
-                        borderRadius: BorderRadius.circular(8.r),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.initColors().nonChangeBlack
-                                      .withOpacity(0.05),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: Text(
-                        tab.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: AppDimensions.kFontSize14,
-                          height: AppDimensions.kLineHeight14(20),
-                          letterSpacing: AppDimensions.kLetterSpacing14(0),
-                          color: isSelected
-                              ? AppColors.initColors().primaryColor
-                              : AppColors.initColors().nonChangeWhite,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              child: tabContent,
             ),
           );
         }).toList(),

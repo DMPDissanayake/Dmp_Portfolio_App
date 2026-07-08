@@ -1,12 +1,17 @@
-import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_skills_laber.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProfessionalSkillsCard extends StatefulWidget {
-  const ProfessionalSkillsCard({super.key});
+  final String title;
+  final String icon;
+  const ProfessionalSkillsCard({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
 
   @override
   State<ProfessionalSkillsCard> createState() => _ProfessionalSkillsCardState();
@@ -17,8 +22,7 @@ class _ProfessionalSkillsCardState extends State<ProfessionalSkillsCard> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 95.h,
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
+
       decoration: BoxDecoration(
         color: AppColors.initColors().nonChangeWhite.withOpacity(0.5),
         borderRadius: BorderRadius.circular(8.r),
@@ -38,34 +42,45 @@ class _ProfessionalSkillsCardState extends State<ProfessionalSkillsCard> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // SvgPicture.asset(
-                //   widget.icon,
-                //   fit: BoxFit.cover,
-                //   color: AppColors.initColors().primaryColor,
-                //   height: 18.h,
-                // ),
-                SizedBox(width: 4.h),
-                Text(
-                  'widget.title',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: AppDimensions.kFontSize14,
-                    height: AppDimensions.kLineHeight14(18),
-                    letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
-                    color: AppColors.initColors().textBlackColor1,
+                Container(
+                  padding: EdgeInsets.all(8.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.initColors().primaryColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: SvgPicture.asset(
+                    widget.icon,
+                    color: AppColors.initColors().primaryColor,
+                    height: 18.h,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 6.h),
+            Text(
+              widget.title,
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: AppDimensions.kFontSize12,
+                height: AppDimensions.kLineHeight14(18),
+                letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                color: AppColors.initColors().textBlackColor1,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+class ProfessionalSkills {
+  final String title;
+  final String icon;
+  ProfessionalSkills({required this.title, required this.icon});
 }

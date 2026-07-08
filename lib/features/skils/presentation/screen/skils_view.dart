@@ -1,4 +1,11 @@
+import 'package:dmpportfolioapp/features/skils/data/models/entity/experience_item.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_bloc.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/currently_mastering_crad.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/experience_section.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/key_awards_section.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/progress_timeline.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/quick_metrics_card.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/title_skil_card.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/professional_skills_card.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/techical_skills_card.dart';
 import 'package:dmpportfolioapp/shared/common/custom_segmented_control_widget.dart';
@@ -33,6 +40,120 @@ class _SkilsViewState extends State<SkilsView> {
     "Professional Skills",
     "Achievements",
     "Learning",
+  ];
+
+  //Professional Skills
+  final List<ProfessionalSkills> _professionalSkills = [
+    ProfessionalSkills(
+      title: 'Communication Skills',
+      icon: AppImages.svgCommunication,
+    ),
+    ProfessionalSkills(title: 'Time Management', icon: AppImages.svgTime),
+    ProfessionalSkills(title: 'Agile/Scrum Workflow', icon: AppImages.svgAgile),
+    ProfessionalSkills(
+      title: 'Requirement Analysis',
+      icon: AppImages.svgRequirement,
+    ),
+    ProfessionalSkills(
+      title: 'Attention to Detail',
+      icon: AppImages.svgAttention,
+    ),
+    ProfessionalSkills(title: 'Adaptability', icon: AppImages.svgAdaptability),
+    ProfessionalSkills(title: 'Quick Learning', icon: AppImages.svgLearning),
+    ProfessionalSkills(title: 'Leadership', icon: AppImages.svgLeadership),
+    ProfessionalSkills(
+      title: 'Client Communication',
+      icon: AppImages.svgClient,
+    ),
+  ];
+
+  final List<MilestoneItem> milestones = [
+    MilestoneItem(
+      years: ["2023", "2024", "2025"],
+      description: "Member of Uva Province Elle Team",
+    ),
+    MilestoneItem(
+      years: ["2022", "2023", "2024"],
+      description: "Represented university at Sri Lanka University Games",
+    ),
+    MilestoneItem(
+      years: ["2019", "2024", "2025"],
+      description:
+          "Awarded University Colors – Elle Event, Rajarata University of Sri Lanka",
+    ),
+    MilestoneItem(
+      years: ["2017 – 2018"],
+      description: "Sumanagale College School Head Prefect",
+    ),
+    MilestoneItem(
+      years: ["2016 – 2018"],
+      description: "Speaker of the School Student Parliament",
+    ),
+    MilestoneItem(
+      years: ["2014 – 2015"],
+      description: "Deputy Minister – Uva Provincial Student Parliament",
+    ),
+  ];
+
+  final List<ProgressTimelineItem> roadmapItems = [
+    ProgressTimelineItem(
+      icon: Icons.speed,
+      title: "Flutter Web Optimization",
+      description: "Performance tuning and rendering strategies",
+      tagText: "In Progress",
+      progress: 0.4, // Matches the partially completed ring look
+    ),
+    ProgressTimelineItem(
+      icon: Icons.rocket_launch_outlined,
+      title: "CI/CD",
+      description:
+          "Automated deployment pipelines with GitHub Actions/Codemagic",
+      tagText: "Deep Dive",
+      progress: 0.3,
+    ),
+    ProgressTimelineItem(
+      icon: Icons.token_outlined, // Swap out for a custom asset image if needed
+      title: "Docker",
+      description: "Containerization for scalable backend and web environments",
+      tagText: "Deep Dive",
+      progress: 0.3,
+    ),
+    ProgressTimelineItem(
+      icon: Icons.shield_outlined,
+      title: "Unit & Widget Testing",
+      description: "Ensuring high-quality code with 100% test coverage",
+      tagText: "Advanced",
+      progress: 0.75,
+    ),
+  ];
+
+  // --- PLACE THIS IN A MOCK DATA FILE OR DIRECTLY IN YOUR VIEW CONTROLLER ---
+  final List<ExperienceItem> mockExperiences = [
+    ExperienceItem(
+      icon: Icons.work_outline,
+      role: "Associate Mobile Engineer",
+      company: "Aventure IT Solution",
+      duration: "Feb 2025 – Present",
+      statusTag: "Current",
+      highlights: [
+        "Delivered 2+ production-ready Flutter apps with 99.9% crash-free performance.",
+        "Integrated 15+ REST API endpoints with FCM & CI/CD (GitHub Actions/Fastlane).",
+        "Architected scalable code using Clean Architecture & BLoC/Riverpod.",
+      ],
+      skills: ["Dart", "Figma", "CI/CD", "BLoC", "Riverpod"],
+    ),
+    ExperienceItem(
+      icon: Icons.integration_instructions_outlined,
+      role: "Mobile Application Intern",
+      company: "Previous Tech Firm",
+      duration: "Jun 2024 – Jan 2025",
+      statusTag: null, // No tag for past positions
+      highlights: [
+        "Assisted in developing feature modules and custom responsive UI widgets based on high-fidelity Figma models.",
+        "Collaborated with backend teams to integrate REST APIs and manage client-side state handling.",
+      ],
+      skills: ["Flutter", "Dart", "Git", "REST API", "Figma"],
+    ),
   ];
 
   @override
@@ -165,50 +286,195 @@ class _SkilsViewState extends State<SkilsView> {
                           if (_selectedIndex == 1)
                             Expanded(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ProfessionalSkillsCard(),
-                                  SizedBox(height: 16.h),
+                                  const ProfesinalTitleSkilCard(
+                                    title: 'Professional Skills',
+                                    subtitle:
+                                        'A snapshot of the strengths I bring to every team',
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Expanded(
+                                    child: GridView.builder(
+                                      itemCount: _professionalSkills.length,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 16.h,
+                                      ),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12.w,
+                                            mainAxisSpacing: 12.h,
+                                            childAspectRatio: 1.8,
+                                          ),
+                                      itemBuilder: (context, index) {
+                                        final skill =
+                                            _professionalSkills[index];
+                                        return ProfessionalSkillsCard(
+                                          title: skill.title,
+                                          icon: skill.icon,
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           if (_selectedIndex == 2)
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Achievements',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: AppDimensions.kFontSize14,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
-                                      color: AppColors.initColors()
-                                          .textBlackColor1,
-                                    ),
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w,
                                   ),
-                                  SizedBox(height: 16.h),
-                                ],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 16.h),
+                                      const ProfesinalTitleSkilCard(
+                                        title: 'Achievements & Highlights',
+                                        subtitle:
+                                            'Milestones, projects, and recognition along the way.',
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      Text(
+                                        'Quick Metrics',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: AppDimensions.kFontSize14,
+                                          height: AppDimensions.kLineHeight14(
+                                            18,
+                                          ),
+                                          letterSpacing:
+                                              AppDimensions.kLetterSpacing14(
+                                                -2.5,
+                                              ),
+                                          color: AppColors.initColors()
+                                              .textBlackColor1,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: QuickMetricsCard(
+                                              count: 2,
+                                              title: 'Years Learning Flutter',
+                                            ),
+                                          ),
+                                          SizedBox(width: 16.w),
+                                          Expanded(
+                                            child: QuickMetricsCard(
+                                              count: 10,
+                                              title: 'Projects Completed',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: QuickMetricsCard(
+                                              count: 20,
+                                              title: 'Technologies Used',
+                                            ),
+                                          ),
+                                          SizedBox(width: 16.w),
+                                          Expanded(
+                                            child: QuickMetricsCard(
+                                              count: 50,
+                                              title: 'Git Commits',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      MilestoneTimeline(
+                                        title: "Key Awards & Milestones",
+                                        items: milestones,
+                                        primaryColor: AppColors.initColors()
+                                            .primaryColor, // Adjust tone match your exact UI hex
+                                      ),
+                                      SizedBox(height: 32.h),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           if (_selectedIndex == 3)
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Learning',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: AppDimensions.kFontSize14,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
-                                      color: AppColors.initColors()
-                                          .textBlackColor1,
-                                    ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ProfesinalTitleSkilCard(
+                                        title: 'Learning & Continuous Growth',
+                                        subtitle:
+                                            'A clear trajectory of professional development.',
+                                      ),
+                                      SizedBox(height: 12.h),
+                                      Text(
+                                        'Currently Mastering',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: AppDimensions.kFontSize14,
+                                          height: AppDimensions.kLineHeight14(
+                                            18,
+                                          ),
+                                          letterSpacing:
+                                              AppDimensions.kLetterSpacing14(
+                                                -2.5,
+                                              ),
+                                          color: AppColors.initColors()
+                                              .textBlackColor1,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      CurrentlyMasteringCrad(
+                                        icon: AppImages.svgAI,
+                                        title: 'AI Integration',
+                                        description:
+                                            'Bringing intelligence into every experience',
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      Divider(
+                                        color: AppColors.initColors()
+                                            .primaryColor
+                                            .withOpacity(0.7),
+                                        height: 1.h,
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      Text(
+                                        'Learning Roadmap',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: AppDimensions.kFontSize14,
+                                          height: AppDimensions.kLineHeight14(
+                                            18,
+                                          ),
+                                          letterSpacing:
+                                              AppDimensions.kLetterSpacing14(
+                                                -2.5,
+                                              ),
+                                          color: AppColors.initColors()
+                                              .textBlackColor1,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      SingleChildScrollView(
+                                        child: ProgressTimeline(
+                                          items: roadmapItems,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 16.h),
-                                ],
+                                ),
                               ),
                             ),
                         ],
@@ -217,22 +483,21 @@ class _SkilsViewState extends State<SkilsView> {
 
                   if (activeTabId == 2)
                     Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Experience',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: AppDimensions.kFontSize14,
-                              height: AppDimensions.kLineHeight14(18),
-                              letterSpacing: AppDimensions.kLetterSpacing14(
-                                -2.5,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const ProfesinalTitleSkilCard(
+                                title: 'Work Experience',
+                                subtitle:
+                                    'Building reliable Flutter apps, end to end.',
                               ),
-                              color: AppColors.initColors().textBlackColor1,
-                            ),
+                              SizedBox(height: 16.h),
+                              ExperienceSection(experiences: mockExperiences),
+                            ],
                           ),
-                          SizedBox(height: 16.h),
-                        ],
+                        ),
                       ),
                     ),
                 ],
