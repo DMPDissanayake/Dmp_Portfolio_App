@@ -1,11 +1,11 @@
-import 'package:dmpportfolioapp/features/education/data/models/eduacation_item_model.dart';
+import 'package:dmpportfolioapp/features/education/domain/entities/education_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EduactionDetaileCard extends StatelessWidget {
-  final EduacationItemModel data;
+  final EducationEntity data;
   const EduactionDetaileCard({super.key, required this.data});
 
   @override

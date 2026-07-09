@@ -1,4 +1,4 @@
-import 'package:dmpportfolioapp/features/education/data/models/eduacation_item_model.dart';
+import 'package:dmpportfolioapp/features/education/domain/entities/education_entity.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/eduaction_detaile_card.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_images.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class EaduationSection extends StatelessWidget {
-  final List<EduacationItemModel> data;
+  final List<EducationEntity> data;
   const EaduationSection({super.key, required this.data});
 
   @override

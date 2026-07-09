@@ -1,5 +1,8 @@
-import 'package:dmpportfolioapp/features/education/data/models/eduacation_item_model.dart';
+import 'package:dmpportfolioapp/core/di/injection_container.dart';
+import 'package:dmpportfolioapp/features/education/domain/entities/education_entity.dart';
 import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_bloc.dart';
+import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_event.dart';
+import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_state.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/eduaction_title_widget.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/education_qualifications_section.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
@@ -17,32 +20,23 @@ class EduactionView extends StatefulWidget {
 }
 
 class _EduactionViewState extends State<EduactionView> {
-  final EdaduationBloc _bloc = EdaduationBloc();
+  final EducationBloc _bloc = sl<EducationBloc>();
+  bool _isLoading = false;
+  List<EducationEntity> _educationList = [];
+  String? _errorMessage;
 
-  final List<EduacationItemModel> mockTimelineData = [
-    EduacationItemModel(
-      title: "B.Sc. (Hons) in Information Systems (Special)",
-      institution: "Rajarata University of Sri Lanka",
-      dateRange: "Apr 2021 – Jan 2025",
-      icon: Icons.school_rounded, // Graduation cap icon
-      bulletPoints: [
-        "Specialized in Information Systems and Software Development.",
-      ],
-      highlightBoxText:
-          "Research Publication: 'Cybersecurity Perception Among Undergraduates in Sri Lanka'",
-    ),
-    EduacationItemModel(
-      title: "Java Certification – Computer Software Engineering",
-      institution: "ACPT – Academy of Computer Programming and Training",
-      dateRange: "Jan 2024 – Jul 2024",
-      icon: Icons.emoji_events_outlined, // Certificate ribbon/badge style icon
-      bulletPoints: [
-        "Completed advanced professional Java and Object-Oriented Programming (OOP) training.",
-        "Developed production-ready desktop applications using Java and JavaFX.",
-      ],
-      highlightBoxText: null, // No research box for this one
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _bloc.add(FetchEducationData());
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +48,25 @@ class _EduactionViewState extends State<EduactionView> {
         child: SafeArea(
           child: BlocProvider.value(
             value: _bloc,
-            child: BlocListener<EdaduationBloc, EdaduationState>(
-              listener: (_, state) {},
+            child: BlocListener<EducationBloc, EducationState>(
+              listener: (_, state) {
+                if (state is EducationLoading) {
+                  setState(() {
+                    _isLoading = true;
+                    _errorMessage = null;
+                  });
+                } else if (state is EducationLoaded) {
+                  setState(() {
+                    _isLoading = false;
+                    _educationList = state.educationList;
+                  });
+                } else if (state is EducationError) {
+                  setState(() {
+                    _isLoading = false;
+                    _errorMessage = state.message;
+                  });
+                }
+              },
               child: Column(
                 children: [
                   SizedBox(height: 16.h),
@@ -64,13 +75,38 @@ class _EduactionViewState extends State<EduactionView> {
                     subtitle: 'Academic foundation and professional training.',
                   ),
                   SizedBox(height: 16.h),
-                  EaduationSection(data: mockTimelineData),
+                  Expanded(child: _buildBody()),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.amber),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Center(
+        child: Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
+      );
+    }
+
+    if (_educationList.isEmpty) {
+      return const Center(
+        child: Text("No Data Found", style: TextStyle(color: Colors.white)),
+      );
+    }
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: EaduationSection(data: _educationList),
     );
   }
 }

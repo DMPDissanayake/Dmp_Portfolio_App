@@ -1,21 +1,17 @@
-import 'package:flutter/material.dart';
-
-class EduacationItemModel {
+class EducationEntity {
   final String title;
   final String institution;
   final String dateRange;
   final List<String> bulletPoints;
-  final IconData icon;
-
-  // Optional field for special callouts like Research Publications
+  final int iconCode;
   final String? highlightBoxText;
 
-  EduacationItemModel({
+  const EducationEntity({
     required this.title,
     required this.institution,
     required this.dateRange,
     required this.bulletPoints,
-    required this.icon,
+    required this.iconCode,
     this.highlightBoxText,
   });
 }
