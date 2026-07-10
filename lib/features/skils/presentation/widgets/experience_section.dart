@@ -1,4 +1,4 @@
-import 'package:dmpportfolioapp/features/skils/data/models/entity/experience_item.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/experience_entity.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/work_experience_card.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_images.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ExperienceSection extends StatelessWidget {
-  final List<ExperienceItem> experiences;
+  final List<ExperienceEntity> experiences;
   const ExperienceSection({super.key, required this.experiences});
 
   @override

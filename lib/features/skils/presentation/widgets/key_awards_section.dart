@@ -1,3 +1,4 @@
+import 'package:dmpportfolioapp/features/skils/domain/entities/skil_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class MilestoneTimeline extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (context, index) {
             final isLast = index == items.length - 1;
+            final item = items[index];
             return IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,7 +117,7 @@ class MilestoneTimeline extends StatelessWidget {
                           Wrap(
                             spacing: 8,
                             runSpacing: 4,
-                            children: items[index].years.map((year) {
+                            children: item.years.map((year) {
                               return Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 8.w,
@@ -143,7 +145,7 @@ class MilestoneTimeline extends StatelessWidget {
                           const SizedBox(height: 8),
                           // Description Text
                           Text(
-                            items[index].description,
+                            item.description,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: AppDimensions.kFontSize12,

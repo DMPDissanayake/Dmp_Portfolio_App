@@ -1,12 +1,12 @@
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_skills_laber.dart';
-import 'package:dmpportfolioapp/features/skils/data/models/entity/experience_item.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/experience_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WorkExperienceCard extends StatelessWidget {
-  final ExperienceItem workExperience;
+  final ExperienceEntity workExperience;
   const WorkExperienceCard({super.key, required this.workExperience});
 
   @override
@@ -67,7 +67,7 @@ class WorkExperienceCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (workExperience.statusTag == 'Current')
+                if (workExperience.isCurrent == true)
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 8.w,
@@ -113,7 +113,7 @@ class WorkExperienceCard extends StatelessWidget {
             // Description Text Block
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: workExperience.highlights.map((highlight) {
+              children: workExperience.responsibilities.map((highlight) {
                 return Padding(
                   padding: EdgeInsets.only(bottom: 4.h),
                   child: Row(
@@ -151,7 +151,7 @@ class WorkExperienceCard extends StatelessWidget {
             Wrap(
               spacing: 6.w,
               runSpacing: 6.h,
-              children: workExperience.skills
+              children: workExperience.technologies
                   .map(
                     (tech) => ProjectSkillsLaber(
                       label: tech,

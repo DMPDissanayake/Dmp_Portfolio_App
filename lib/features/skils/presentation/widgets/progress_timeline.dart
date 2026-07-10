@@ -1,3 +1,4 @@
+import 'package:dmpportfolioapp/features/skils/domain/entities/skil_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class DashedLinePainter extends CustomPainter {
 }
 
 class ProgressTimeline extends StatelessWidget {
-  final List<ProgressTimelineItem> items;
+  final List<LearningRoadmapEntity> items;
   final Color primaryColor;
 
   ProgressTimeline({super.key, required this.items, Color? primaryColor})
@@ -87,7 +88,7 @@ class ProgressTimeline extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Icon(item.icon, color: primaryColor, size: 18.h),
+                        Icon(Icons.check, color: primaryColor, size: 18.h),
                       ],
                     ),
                     // Dashed Vertical Connector
@@ -124,7 +125,7 @@ class ProgressTimeline extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        item.description,
+                        item.subtitle,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: AppDimensions.kFontSize11,
@@ -150,7 +151,7 @@ class ProgressTimeline extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          item.tagText,
+                          item.status,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: AppDimensions.kFontSize12,

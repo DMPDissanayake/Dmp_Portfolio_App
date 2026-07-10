@@ -1,20 +1,15 @@
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_skills_laber.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/skil_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
+import 'package:dmpportfolioapp/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TechicalSkillsCard extends StatefulWidget {
-  final String icon;
-  final String title;
-  final List<String> skillsList;
-  const TechicalSkillsCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.skillsList,
-  });
+  final SkilEntity data;
+  const TechicalSkillsCard({super.key, required this.data});
 
   @override
   State<TechicalSkillsCard> createState() => _TechicalSkillsCardState();
@@ -26,7 +21,6 @@ class _TechicalSkillsCardState extends State<TechicalSkillsCard> {
     return Container(
       width: double.infinity,
       height: 95.h,
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         color: AppColors.initColors().nonChangeWhite.withOpacity(0.5),
         borderRadius: BorderRadius.circular(8.r),
@@ -52,20 +46,24 @@ class _TechicalSkillsCardState extends State<TechicalSkillsCard> {
             Row(
               children: [
                 SvgPicture.asset(
-                  widget.icon,
+                  AppImages.svgMobileDelopment,
                   fit: BoxFit.cover,
                   color: AppColors.initColors().primaryColor,
                   height: 18.h,
                 ),
                 SizedBox(width: 4.h),
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: AppDimensions.kFontSize14,
-                    height: AppDimensions.kLineHeight14(18),
-                    letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
-                    color: AppColors.initColors().textBlackColor1,
+                Expanded(
+                  child: Text(
+                    widget.data.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: AppDimensions.kFontSize12,
+                      height: AppDimensions.kLineHeight14(18),
+                      letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                      color: AppColors.initColors().textBlackColor1,
+                    ),
                   ),
                 ),
               ],
@@ -73,18 +71,19 @@ class _TechicalSkillsCardState extends State<TechicalSkillsCard> {
             SizedBox(height: 8.h),
 
             //Skills List
-            Wrap(
-              spacing: 4.w,
-              runSpacing: 4.h,
-              children: widget.skillsList
-                  .map(
-                    (tech) => ProjectSkillsLaber(
-                      label: tech,
-                      color: AppColors.initColors().successColor,
-                    ),
-                  )
-                  .toList(),
-            ),
+            if (widget.data.items!.isNotEmpty)
+              Wrap(
+                spacing: 4.w,
+                runSpacing: 4.h,
+                children: widget.data.items!
+                    .map(
+                      (tech) => ProjectSkillsLaber(
+                        label: tech,
+                        color: AppColors.initColors().successColor,
+                      ),
+                    )
+                    .toList(),
+              ),
           ],
         ),
       ),

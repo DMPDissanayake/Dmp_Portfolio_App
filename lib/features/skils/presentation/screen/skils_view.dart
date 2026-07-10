@@ -1,5 +1,9 @@
-import 'package:dmpportfolioapp/features/skils/data/models/entity/experience_item.dart';
+import 'package:dmpportfolioapp/core/di/injection_container.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/experience_entity.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/skil_entity.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_bloc.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_event.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_state.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/currently_mastering_crad.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/experience_section.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/key_awards_section.dart';
@@ -27,7 +31,7 @@ class SkilsView extends StatefulWidget {
 }
 
 class _SkilsViewState extends State<SkilsView> {
-  final SkilsBloc _bloc = SkilsBloc();
+  final SkilsBloc _bloc = sl<SkilsBloc>();
   int activeTabId = 1;
   int _selectedIndex = 0;
 
@@ -42,119 +46,26 @@ class _SkilsViewState extends State<SkilsView> {
     "Learning",
   ];
 
-  //Professional Skills
-  final List<ProfessionalSkills> _professionalSkills = [
-    ProfessionalSkills(
-      title: 'Communication Skills',
-      icon: AppImages.svgCommunication,
-    ),
-    ProfessionalSkills(title: 'Time Management', icon: AppImages.svgTime),
-    ProfessionalSkills(title: 'Agile/Scrum Workflow', icon: AppImages.svgAgile),
-    ProfessionalSkills(
-      title: 'Requirement Analysis',
-      icon: AppImages.svgRequirement,
-    ),
-    ProfessionalSkills(
-      title: 'Attention to Detail',
-      icon: AppImages.svgAttention,
-    ),
-    ProfessionalSkills(title: 'Adaptability', icon: AppImages.svgAdaptability),
-    ProfessionalSkills(title: 'Quick Learning', icon: AppImages.svgLearning),
-    ProfessionalSkills(title: 'Leadership', icon: AppImages.svgLeadership),
-    ProfessionalSkills(
-      title: 'Client Communication',
-      icon: AppImages.svgClient,
-    ),
-  ];
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  final List<MilestoneItem> milestones = [
-    MilestoneItem(
-      years: ["2023", "2024", "2025"],
-      description: "Member of Uva Province Elle Team",
-    ),
-    MilestoneItem(
-      years: ["2022", "2023", "2024"],
-      description: "Represented university at Sri Lanka University Games",
-    ),
-    MilestoneItem(
-      years: ["2019", "2024", "2025"],
-      description:
-          "Awarded University Colors – Elle Event, Rajarata University of Sri Lanka",
-    ),
-    MilestoneItem(
-      years: ["2017 – 2018"],
-      description: "Sumanagale College School Head Prefect",
-    ),
-    MilestoneItem(
-      years: ["2016 – 2018"],
-      description: "Speaker of the School Student Parliament",
-    ),
-    MilestoneItem(
-      years: ["2014 – 2015"],
-      description: "Deputy Minister – Uva Provincial Student Parliament",
-    ),
-  ];
+  List<SkilEntity> _techicalSkillsList = [];
+  List<SkilEntity> _professionalSkillsList = [];
+  SkilEntity? _achievements;
+  SkilEntity? _learning;
 
-  final List<ProgressTimelineItem> roadmapItems = [
-    ProgressTimelineItem(
-      icon: Icons.speed,
-      title: "Flutter Web Optimization",
-      description: "Performance tuning and rendering strategies",
-      tagText: "In Progress",
-      progress: 0.4, // Matches the partially completed ring look
-    ),
-    ProgressTimelineItem(
-      icon: Icons.rocket_launch_outlined,
-      title: "CI/CD",
-      description:
-          "Automated deployment pipelines with GitHub Actions/Codemagic",
-      tagText: "Deep Dive",
-      progress: 0.3,
-    ),
-    ProgressTimelineItem(
-      icon: Icons.token_outlined, // Swap out for a custom asset image if needed
-      title: "Docker",
-      description: "Containerization for scalable backend and web environments",
-      tagText: "Deep Dive",
-      progress: 0.3,
-    ),
-    ProgressTimelineItem(
-      icon: Icons.shield_outlined,
-      title: "Unit & Widget Testing",
-      description: "Ensuring high-quality code with 100% test coverage",
-      tagText: "Advanced",
-      progress: 0.75,
-    ),
-  ];
+  List<ExperienceEntity> _experienceList = [];
 
-  // --- PLACE THIS IN A MOCK DATA FILE OR DIRECTLY IN YOUR VIEW CONTROLLER ---
-  final List<ExperienceItem> mockExperiences = [
-    ExperienceItem(
-      icon: Icons.work_outline,
-      role: "Associate Mobile Engineer",
-      company: "Aventure IT Solution",
-      duration: "Feb 2025 – Present",
-      statusTag: "Current",
-      highlights: [
-        "Delivered 2+ production-ready Flutter apps with 99.9% crash-free performance.",
-        "Integrated 15+ REST API endpoints with FCM & CI/CD (GitHub Actions/Fastlane).",
-        "Architected scalable code using Clean Architecture & BLoC/Riverpod.",
-      ],
-      skills: ["Dart", "Figma", "CI/CD", "BLoC", "Riverpod"],
-    ),
-    ExperienceItem(
-      icon: Icons.integration_instructions_outlined,
-      role: "Mobile Application Intern",
-      company: "Previous Tech Firm",
-      duration: "Jun 2024 – Jan 2025",
-      statusTag: null, // No tag for past positions
-      highlights: [
-        "Assisted in developing feature modules and custom responsive UI widgets based on high-fidelity Figma models.",
-        "Collaborated with backend teams to integrate REST APIs and manage client-side state handling.",
-      ],
-      skills: ["Flutter", "Dart", "Git", "REST API", "Figma"],
-    ),
-  ];
+  @override
+  void initState() {
+    if (activeTabId == 1) {
+      _bloc.add(FetchSkilsData());
+    } else if (activeTabId == 2) {
+      _bloc.add(FetchExperienceData());
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +79,46 @@ class _SkilsViewState extends State<SkilsView> {
           child: BlocProvider.value(
             value: _bloc,
             child: BlocListener<SkilsBloc, SkilsState>(
-              listener: (_, state) {},
+              listener: (_, state) {
+                if (state is SkilsLoading) {
+                  if (_techicalSkillsList.isEmpty && _experienceList.isEmpty) {
+                    setState(() {
+                      _isLoading = true;
+                      _errorMessage = null;
+                    });
+                  }
+                } else if (state is SkilsLoaded) {
+                  setState(() {
+                    _isLoading = false;
+                    //technical
+                    _techicalSkillsList = state.skilsList
+                        .where((skill) => skill.category == 'technical')
+                        .toList();
+                    //professional
+                    _professionalSkillsList = state.skilsList
+                        .where((skill) => skill.category == 'professional')
+                        .toList();
+                    //achievements
+                    _achievements = state.skilsList
+                        .where((skill) => skill.category == 'achievement')
+                        .firstOrNull;
+                    //learning
+                    _learning = state.skilsList
+                        .where((skill) => skill.category == 'learning')
+                        .firstOrNull;
+                  });
+                } else if (state is ExperienceLoaded) {
+                  setState(() {
+                    _isLoading = false;
+                    _experienceList = state.experienceList;
+                  });
+                } else if (state is SkilsError) {
+                  setState(() {
+                    _isLoading = false;
+                    _errorMessage = state.message;
+                  });
+                }
+              },
               child: Column(
                 children: [
                   SizedBox(height: 16.h),
@@ -180,6 +130,12 @@ class _SkilsViewState extends State<SkilsView> {
                       onTabSelected: (selectedTab) {
                         setState(() {
                           activeTabId = selectedTab.id;
+                          if (activeTabId == 1 && _techicalSkillsList.isEmpty) {
+                            _bloc.add(FetchSkilsData());
+                          } else if (activeTabId == 2 &&
+                              _experienceList.isEmpty) {
+                            _bloc.add(FetchExperienceData());
+                          }
                         });
                       },
                     ),
@@ -200,87 +156,23 @@ class _SkilsViewState extends State<SkilsView> {
                           SizedBox(height: 16.h),
                           if (_selectedIndex == 0)
                             Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Mobile Development',
-                                      skillsList: [
-                                        'Flutter',
-                                        'Dart',
-                                        'Android Development',
-                                        'Android Native',
-                                        'Responsive UI Development',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'State Management',
-                                      skillsList: [
-                                        'BLoC',
-                                        'Provider',
-                                        'Riverpod',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Architecture',
-                                      skillsList: [
-                                        'Clean Architecture',
-                                        'Repository Pattern',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Backend & APIs',
-                                      skillsList: [
-                                        'REST API Integration',
-                                        'Firebase Authentication',
-                                        'Firebase Firestore',
-                                        'Push Notifications',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Local Storage',
-                                      skillsList: [
-                                        'Hive',
-                                        'Hive',
-                                        'Android Development',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Tools & Platforms',
-                                      skillsList: [
-                                        'Git & GitHub',
-                                        'Android Studio',
-                                        'VS Code',
-                                        'Postman',
-                                        'FlutterFire CLI',
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    TechicalSkillsCard(
-                                      icon: AppImages.svgMobileDelopment,
-                                      title: 'Testing & QA',
-                                      skillsList: [
-                                        'Manual Testing',
-                                        'Debugging',
-                                        'Widget Testing',
-                                        'API Testing',
-                                      ],
-                                    ),
-                                  ],
+                              child: GridView.builder(
+                                itemCount: _techicalSkillsList.length,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 16.h,
                                 ),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10.w,
+                                      mainAxisSpacing: 12.h,
+                                      childAspectRatio: 1,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final skill = _techicalSkillsList[index];
+                                  return TechicalSkillsCard(data: skill);
+                                },
                               ),
                             ),
                           if (_selectedIndex == 1)
@@ -288,15 +180,20 @@ class _SkilsViewState extends State<SkilsView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const ProfesinalTitleSkilCard(
-                                    title: 'Professional Skills',
-                                    subtitle:
-                                        'A snapshot of the strengths I bring to every team',
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                    ),
+                                    child: const ProfesinalTitleSkilCard(
+                                      title: 'Professional Skills',
+                                      subtitle:
+                                          'A snapshot of the strengths I bring to every team',
+                                    ),
                                   ),
                                   SizedBox(height: 8.h),
                                   Expanded(
                                     child: GridView.builder(
-                                      itemCount: _professionalSkills.length,
+                                      itemCount: _professionalSkillsList.length,
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 16.w,
                                         vertical: 16.h,
@@ -310,10 +207,9 @@ class _SkilsViewState extends State<SkilsView> {
                                           ),
                                       itemBuilder: (context, index) {
                                         final skill =
-                                            _professionalSkills[index];
+                                            _professionalSkillsList[index];
                                         return ProfessionalSkillsCard(
-                                          title: skill.title,
-                                          icon: skill.icon,
+                                          skill: skill.items![index],
                                         );
                                       },
                                     ),
@@ -360,14 +256,20 @@ class _SkilsViewState extends State<SkilsView> {
                                         children: [
                                           Expanded(
                                             child: QuickMetricsCard(
-                                              count: 2,
+                                              count:
+                                                  _achievements
+                                                      ?.metrics?['years_learning'] ??
+                                                  "0",
                                               title: 'Years Learning Flutter',
                                             ),
                                           ),
                                           SizedBox(width: 16.w),
                                           Expanded(
                                             child: QuickMetricsCard(
-                                              count: 10,
+                                              count:
+                                                  _achievements
+                                                      ?.metrics?['projects_completed'] ??
+                                                  "0",
                                               title: 'Projects Completed',
                                             ),
                                           ),
@@ -378,25 +280,43 @@ class _SkilsViewState extends State<SkilsView> {
                                         children: [
                                           Expanded(
                                             child: QuickMetricsCard(
-                                              count: 20,
+                                              count:
+                                                  _achievements
+                                                      ?.metrics?['technologies_used'] ??
+                                                  '0',
                                               title: 'Technologies Used',
                                             ),
                                           ),
                                           SizedBox(width: 16.w),
                                           Expanded(
                                             child: QuickMetricsCard(
-                                              count: 50,
+                                              count:
+                                                  _achievements
+                                                      ?.metrics?['git_commits'] ??
+                                                  '0',
                                               title: 'Git Commits',
                                             ),
                                           ),
                                         ],
                                       ),
                                       SizedBox(height: 16.h),
-                                      MilestoneTimeline(
-                                        title: "Key Awards & Milestones",
-                                        items: milestones,
-                                        primaryColor: AppColors.initColors()
-                                            .primaryColor, // Adjust tone match your exact UI hex
+                                      SizedBox(
+                                        height: 300.h, // Constrain the height
+                                        child: MilestoneTimeline(
+                                          title: "Key Awards & Milestones",
+                                          items:
+                                              (_achievements?.milestones ?? [])
+                                                  .map((m) {
+                                                    return MilestoneItem(
+                                                      years: m.years,
+                                                      description:
+                                                          m.description,
+                                                    );
+                                                  })
+                                                  .toList(),
+                                          primaryColor: AppColors.initColors()
+                                              .primaryColor, // Adjust tone match your exact UI hex
+                                        ),
                                       ),
                                       SizedBox(height: 32.h),
                                     ],
@@ -469,7 +389,8 @@ class _SkilsViewState extends State<SkilsView> {
                                       SizedBox(height: 8.h),
                                       SingleChildScrollView(
                                         child: ProgressTimeline(
-                                          items: roadmapItems,
+                                          items:
+                                              _learning?.learningRoadmap ?? [],
                                         ),
                                       ),
                                     ],
@@ -494,7 +415,7 @@ class _SkilsViewState extends State<SkilsView> {
                                     'Building reliable Flutter apps, end to end.',
                               ),
                               SizedBox(height: 16.h),
-                              ExperienceSection(experiences: mockExperiences),
+                              ExperienceSection(experiences: _experienceList),
                             ],
                           ),
                         ),

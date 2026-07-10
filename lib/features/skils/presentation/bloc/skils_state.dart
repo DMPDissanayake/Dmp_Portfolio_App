@@ -1,6 +1,29 @@
-part of 'skils_bloc.dart';
+import 'package:dmpportfolioapp/features/skils/domain/entities/experience_entity.dart';
 
-@immutable
-sealed class SkilsState {}
+import '../../domain/entities/skil_entity.dart';
 
-final class SkilsInitial extends SkilsState {}
+abstract class SkilsState {
+  const SkilsState();
+}
+
+class SkilsInitial extends SkilsState {}
+
+class SkilsLoading extends SkilsState {}
+
+class SkilsError extends SkilsState {
+  final String message;
+
+  const SkilsError({required this.message});
+}
+
+class SkilsLoaded extends SkilsState {
+  final List<SkilEntity> skilsList;
+
+  const SkilsLoaded({required this.skilsList});
+}
+
+class ExperienceLoaded extends SkilsState {
+  final List<ExperienceEntity> experienceList;
+
+  const ExperienceLoaded({required this.experienceList});
+}

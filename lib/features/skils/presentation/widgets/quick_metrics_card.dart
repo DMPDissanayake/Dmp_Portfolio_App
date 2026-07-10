@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuickMetricsCard extends StatelessWidget {
-  final int count;
+  final String count;
   final String title;
   const QuickMetricsCard({super.key, required this.count, required this.title});
 
@@ -35,7 +35,7 @@ class QuickMetricsCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${count.toString()}+',
+              count,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: AppDimensions.kFontSize30,

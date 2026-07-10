@@ -1,17 +1,13 @@
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
+import 'package:dmpportfolioapp/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfessionalSkillsCard extends StatefulWidget {
-  final String title;
-  final String icon;
-  const ProfessionalSkillsCard({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
+  final String skill;
+  const ProfessionalSkillsCard({super.key, required this.skill});
 
   @override
   State<ProfessionalSkillsCard> createState() => _ProfessionalSkillsCardState();
@@ -54,7 +50,7 @@ class _ProfessionalSkillsCardState extends State<ProfessionalSkillsCard> {
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: SvgPicture.asset(
-                    widget.icon,
+                    AppImages.svgCommunication,
                     color: AppColors.initColors().primaryColor,
                     height: 18.h,
                   ),
@@ -63,7 +59,10 @@ class _ProfessionalSkillsCardState extends State<ProfessionalSkillsCard> {
             ),
             SizedBox(height: 6.h),
             Text(
-              widget.title,
+              widget.skill,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: AppDimensions.kFontSize12,
