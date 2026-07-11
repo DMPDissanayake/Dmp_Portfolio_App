@@ -1,4 +1,5 @@
 import 'package:dmpportfolioapp/features/projects/data/models/project_model.dart';
+import 'package:dmpportfolioapp/features/projects/domain/entities/project_entity.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_card_button.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_skills_laber.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetaileProjectCard extends StatelessWidget {
-  final ProjectModel projectModel;
-  const DetaileProjectCard({super.key, required this.projectModel});
+  final ProjectEntity project;
+  const DetaileProjectCard({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class DetaileProjectCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        projectModel.title,
+                        project.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -74,7 +75,7 @@ class DetaileProjectCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        projectModel.category,
+                        project.category,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: AppDimensions.kFontSize10,
@@ -88,7 +89,7 @@ class DetaileProjectCard extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  projectModel.description,
+                  project.subtitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -105,7 +106,7 @@ class DetaileProjectCard extends StatelessWidget {
                 SizedBox(height: 12.h),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: projectModel.bulletPoints.map((highlight) {
+                  children: project.responsibilities.map((highlight) {
                     return Padding(
                       padding: EdgeInsets.only(bottom: 4.h),
                       child: Row(
@@ -146,7 +147,7 @@ class DetaileProjectCard extends StatelessWidget {
                 Wrap(
                   spacing: 6.w,
                   runSpacing: 6.h,
-                  children: projectModel.techStack
+                  children: project.technologies
                       .map(
                         (tech) => ProjectSkillsLaber(
                           label: tech,

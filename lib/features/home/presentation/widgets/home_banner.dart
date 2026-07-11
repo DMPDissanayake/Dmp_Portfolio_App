@@ -1,3 +1,4 @@
+import 'package:dmpportfolioapp/features/about/domain/entity/profile_entity.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:dmpportfolioapp/utils/app_images.dart';
@@ -6,7 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeBanner extends StatefulWidget {
-  const HomeBanner({super.key});
+  final ProfileEntity profileEntity;
+  const HomeBanner({super.key, required this.profileEntity});
 
   @override
   State<HomeBanner> createState() => _HomeBannerState();
@@ -59,9 +61,9 @@ class _HomeBannerState extends State<HomeBanner> {
                       color: AppColors.initColors().textBlackColor1,
                     ),
                     children: <TextSpan>[
-                      const TextSpan(text: 'I’m DMP Dissanayake \n'),
+                      TextSpan(text: 'I’m ${widget.profileEntity.name} \n'),
                       TextSpan(
-                        text: 'Flutter Mobile',
+                        text: widget.profileEntity.title,
                         style: TextStyle(
                           color: AppColors.initColors().primaryColor,
                         ),
@@ -93,7 +95,7 @@ class _HomeBannerState extends State<HomeBanner> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100.r),
                 child: Image.network(
-                  'https://drive.google.com/uc?export=view&id=1II6ejrixHINsooflYoj9ywSikM-kL0XZ',
+                  widget.profileEntity.profileUrl,
                   height: 90.h,
                   width: 90.w,
                   fit: BoxFit.cover,

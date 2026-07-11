@@ -1,5 +1,9 @@
+import 'package:dmpportfolioapp/core/di/injection_container.dart';
 import 'package:dmpportfolioapp/features/projects/data/models/project_model.dart';
+import 'package:dmpportfolioapp/features/projects/domain/entities/project_entity.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_bloc.dart';
+import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_event.dart';
+import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_state.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/detaile_project_card.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_title_widget.dart';
 import 'package:dmpportfolioapp/shared/common/custom_segmented_control_widget.dart';
@@ -18,7 +22,7 @@ class ProjectView extends StatefulWidget {
 }
 
 class _ProjectViewState extends State<ProjectView> {
-  final ProjectBloc _bloc = ProjectBloc();
+  final ProjectBloc _bloc = sl<ProjectBloc>();
 
   int activeTabId = 1;
 
@@ -27,44 +31,23 @@ class _ProjectViewState extends State<ProjectView> {
     TabTata(id: 2, name: "Personal"),
   ];
 
-  final List<ProjectModel> mockProjects = [
-    ProjectModel(
-      title: "EVO Charging Operator App",
-      category: "E-Mobility",
-      description:
-          "Real-time monitoring of live EV charging stations using secure RESTful integrations and push alerts.",
-      bulletPoints: [
-        "Integrated Firebase Cloud Messaging (FCM) for 24/7 real-time user alerts.",
-        "Optimized image rendering to reduce memory footprints.",
-        "Delivered 99.9% crash-free reliability across production releases.",
-      ],
-      techStack: ["Flutter", "Dart", "Clean Architecture", "BLoC", "Firebase"],
-      onViewLive: () => print("Opening EVO Live..."),
-      onAppStore: () => print("Opening EVO App Store..."),
-    ),
-    ProjectModel(
-      title: "Chamber Pro – Legal Operations Management App",
-      category: "LegalTech",
-      description:
-          "Streamlined legal operations by building a structured UI to manage clients, lawyers, cases, and tasks efficiently.",
-      bulletPoints: [
-        "Optimized user workflow with dynamic data rendering via secure RESTful API integration.",
-        "Designed structured, responsive UIs to seamlessly manage complex, multi-entity relationships.",
-        "Streamlined development and API testing workflows using Postman and precise Figma designs.",
-      ],
-      techStack: [
-        "Flutter",
-        "Dart",
-        "REST API",
-        "Firebase",
-        "Clean Architecture",
-        "Postman",
-        "Figma",
-      ],
-      onViewLive: () => print("Opening Chamber Pro Live..."),
-      onAppStore: () => print("Opening Chamber Pro App Store..."),
-    ),
-  ];
+  bool _isLoading = false;
+  List<ProjectEntity> _organizationProjectList = [];
+  List<ProjectEntity> _personalProjectList = [];
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    _bloc.add(FetchProjectData());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +60,32 @@ class _ProjectViewState extends State<ProjectView> {
           child: BlocProvider.value(
             value: _bloc,
             child: BlocListener<ProjectBloc, ProjectState>(
-              listener: (_, state) {},
+              listener: (_, state) {
+                if (state is ProjectLoading) {
+                  setState(() {
+                    _isLoading = true;
+                    _errorMessage = null;
+                  });
+                } else if (state is ProjectLoaded) {
+                  setState(() {
+                    _isLoading = false;
+                    //organization projects
+                    _organizationProjectList = state.projectList
+                        .where((project) => project.category == 'organization')
+                        .toList();
+
+                    //personal projects
+                    _personalProjectList = state.projectList
+                        .where((project) => project.category == 'personal')
+                        .toList();
+                  });
+                } else if (state is ProjectError) {
+                  setState(() {
+                    _isLoading = false;
+                    _errorMessage = state.message;
+                  });
+                }
+              },
               child: Column(
                 children: [
                   SizedBox(height: 16.h),
@@ -107,14 +115,12 @@ class _ProjectViewState extends State<ProjectView> {
                           const SizedBox(height: 16),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: mockProjects.length,
+                              itemCount: _organizationProjectList.length,
                               itemBuilder: (context, index) {
-                                final project = mockProjects[index];
+                                final project = _organizationProjectList[index];
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 16.0),
-                                  child: DetaileProjectCard(
-                                    projectModel: project,
-                                  ),
+                                  child: DetaileProjectCard(project: project),
                                 );
                               },
                             ),
@@ -135,14 +141,12 @@ class _ProjectViewState extends State<ProjectView> {
                           const SizedBox(height: 16),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: mockProjects.length,
+                              itemCount: _personalProjectList.length,
                               itemBuilder: (context, index) {
-                                final project = mockProjects[index];
+                                final project = _personalProjectList[index];
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 16.0),
-                                  child: DetaileProjectCard(
-                                    projectModel: project,
-                                  ),
+                                  child: DetaileProjectCard(project: project),
                                 );
                               },
                             ),

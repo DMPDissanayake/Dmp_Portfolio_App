@@ -1,3 +1,4 @@
+import 'package:dmpportfolioapp/features/about/domain/entity/profile_entity.dart';
 import 'package:dmpportfolioapp/features/about/presentation/widgets/profile_skil_row.dart';
 import 'package:dmpportfolioapp/features/about/presentation/widgets/skills_count_card.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/eduaction_title_widget.dart';
@@ -11,7 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfileDeteileCard extends StatelessWidget {
-  const ProfileDeteileCard({super.key});
+  final ProfileEntity data;
+  const ProfileDeteileCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class ProfileDeteileCard extends StatelessWidget {
                 Expanded(
                   child: EduactionTitleSkilCard(
                     title: 'About Me',
-                    subtitle: 'Flutter Mobile Developer',
+                    subtitle: data.title,
                   ),
                 ),
               ],
@@ -54,7 +56,7 @@ class ProfileDeteileCard extends StatelessWidget {
             Divider(thickness: 1.w, color: AppColors.initColors().primaryColor),
             SizedBox(height: 4.h),
             Text(
-              '👋 Hi, I\'m DMP Dissanayake',
+              '👋 Hi, I\'m ${data.name}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: AppDimensions.kFontSize14,
@@ -65,7 +67,7 @@ class ProfileDeteileCard extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              'Flutter Developer passionate about building modern, scalable, and user-friendly mobile applications. I specialize in Flutter, Clean Architecture, BLoC state management, REST API integration, and responsive UI design.',
+              data.bio,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: AppDimensions.kFontSize12,
