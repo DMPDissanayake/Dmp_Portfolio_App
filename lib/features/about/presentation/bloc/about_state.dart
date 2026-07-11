@@ -1,6 +1,21 @@
-part of 'about_bloc.dart';
+import 'package:dmpportfolioapp/features/about/domain/entity/profile_entity.dart';
 
-@immutable
-sealed class AboutState {}
+abstract class ProfileState {
+  const ProfileState();
+}
 
-final class AboutInitial extends AboutState {}
+class ProfileInitial extends ProfileState {}
+
+class ProfileLoading extends ProfileState {}
+
+class ProfileLoaded extends ProfileState {
+  final ProfileEntity data;
+
+  const ProfileLoaded({required this.data});
+}
+
+class ProfileError extends ProfileState {
+  final String message;
+
+  const ProfileError({required this.message});
+}

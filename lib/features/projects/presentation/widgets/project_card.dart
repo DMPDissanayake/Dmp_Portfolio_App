@@ -1,4 +1,4 @@
-import 'package:dmpportfolioapp/features/projects/data/models/project_entity.dart';
+import 'package:dmpportfolioapp/features/projects/domain/entities/project_entity.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_logo_card.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
@@ -45,7 +45,7 @@ class _ProjectCardState extends State<ProjectCard> {
               topRight: Radius.circular(16.r),
             ),
             child: Image.asset(
-              widget.project.images,
+              AppImages.projectExPng,
               fit: BoxFit.cover,
               height: 90.h,
               width: double.infinity,
@@ -68,8 +68,8 @@ class _ProjectCardState extends State<ProjectCard> {
                       Row(
                         children: [
                           ProjectLogoCard(
-                            logo: widget.project.icon,
-                            color: widget.project.color,
+                            logo: AppImages.svgEv,
+                            color: AppColors.initColors().successColor,
                           ),
                           SizedBox(width: 4.w),
                           Text(
@@ -94,7 +94,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       ),
                       SizedBox(height: 8.w),
                       Text(
-                        widget.project.fullDescription,
+                        widget.project.subtitle,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -114,7 +114,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             .map(
                               (tech) => ProjectSkillsLaber(
                                 label: tech,
-                                color: widget.project.color,
+                                color: AppColors.initColors().successColor,
                               ),
                             )
                             .toList(),
