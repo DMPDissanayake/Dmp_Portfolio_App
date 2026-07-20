@@ -7,10 +7,13 @@ import 'package:dmpportfolioapp/features/skils/presentation/bloc/skils_state.dar
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/currently_mastering_crad.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/experience_section.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/key_awards_section.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/shimmer_experience_section.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/progress_timeline.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/quick_metrics_card.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/title_skil_card.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/professional_skills_card.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/shimmer_professional_skills_card.dart';
+import 'package:dmpportfolioapp/features/skils/presentation/widgets/shimmer_techical_skills_card.dart';
 import 'package:dmpportfolioapp/features/skils/presentation/widgets/techical_skills_card.dart';
 import 'package:dmpportfolioapp/shared/common/custom_segmented_control_widget.dart';
 import 'package:dmpportfolioapp/shared/common/custom_tab_bar_widget.dart';
@@ -20,6 +23,7 @@ import 'package:dmpportfolioapp/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class SkilsView extends StatefulWidget {
   final Function(int, {dynamic data}) onChangeTab;
@@ -69,6 +73,7 @@ class _SkilsViewState extends State<SkilsView> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -81,12 +86,10 @@ class _SkilsViewState extends State<SkilsView> {
             child: BlocListener<SkilsBloc, SkilsState>(
               listener: (_, state) {
                 if (state is SkilsLoading) {
-                  if (_techicalSkillsList.isEmpty && _experienceList.isEmpty) {
-                    setState(() {
-                      _isLoading = true;
-                      _errorMessage = null;
-                    });
-                  }
+                  setState(() {
+                    _isLoading = true;
+                    _errorMessage = null;
+                  });
                 } else if (state is SkilsLoaded) {
                   setState(() {
                     _isLoading = false;
@@ -156,24 +159,41 @@ class _SkilsViewState extends State<SkilsView> {
                           SizedBox(height: 16.h),
                           if (_selectedIndex == 0)
                             Expanded(
-                              child: GridView.builder(
-                                itemCount: _techicalSkillsList.length,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w,
-                                  vertical: 16.h,
-                                ),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 10.w,
-                                      mainAxisSpacing: 12.h,
-                                      childAspectRatio: 1,
+                              child: _isLoading
+                                  ? GridView.builder(
+                                      itemCount: 6,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 16.h,
+                                      ),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 10.w,
+                                            mainAxisSpacing: 12.h,
+                                            childAspectRatio: 1.2,
+                                          ),
+                                      itemBuilder: (context, index) =>
+                                          const ShimmerTechicalSkillsCard(),
+                                    )
+                                  : GridView.builder(
+                                      itemCount: _techicalSkillsList.length,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 16.h,
+                                      ),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 10.w,
+                                            mainAxisSpacing: 12.h,
+                                            childAspectRatio: isMobile ? 1 : 5,
+                                          ),
+                                      itemBuilder: (context, index) =>
+                                          TechicalSkillsCard(
+                                            data: _techicalSkillsList[index],
+                                          ),
                                     ),
-                                itemBuilder: (context, index) {
-                                  final skill = _techicalSkillsList[index];
-                                  return TechicalSkillsCard(data: skill);
-                                },
-                              ),
                             ),
                           if (_selectedIndex == 1)
                             Expanded(
@@ -192,27 +212,45 @@ class _SkilsViewState extends State<SkilsView> {
                                   ),
                                   SizedBox(height: 8.h),
                                   Expanded(
-                                    child: GridView.builder(
-                                      itemCount: _professionalSkillsList.length,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 16.h,
-                                      ),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 12.w,
-                                            mainAxisSpacing: 12.h,
-                                            childAspectRatio: 1.8,
+                                    child: _isLoading
+                                        ? GridView.builder(
+                                            itemCount: 6,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w,
+                                              vertical: 16.h,
+                                            ),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  crossAxisSpacing: 12.w,
+                                                  mainAxisSpacing: 12.h,
+                                                  childAspectRatio: 0.8,
+                                                ),
+                                            itemBuilder: (context, index) =>
+                                                const ShimmerProfessionalSkillsCard(),
+                                          )
+                                        : GridView.builder(
+                                            itemCount:
+                                                _professionalSkillsList.length,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w,
+                                              vertical: 16.h,
+                                            ),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  crossAxisSpacing: 12.w,
+                                                  mainAxisSpacing: 12.h,
+                                                  childAspectRatio: 1.8,
+                                                ),
+                                            itemBuilder: (context, index) {
+                                              final skill =
+                                                  _professionalSkillsList[index];
+                                              return ProfessionalSkillsCard(
+                                                skill: skill.items![index],
+                                              );
+                                            },
                                           ),
-                                      itemBuilder: (context, index) {
-                                        final skill =
-                                            _professionalSkillsList[index];
-                                        return ProfessionalSkillsCard(
-                                          skill: skill.items![index],
-                                        );
-                                      },
-                                    ),
                                   ),
                                 ],
                               ),
@@ -414,8 +452,12 @@ class _SkilsViewState extends State<SkilsView> {
                                 subtitle:
                                     'Building reliable Flutter apps, end to end.',
                               ),
-                              SizedBox(height: 16.h),
-                              ExperienceSection(experiences: _experienceList),
+                              SizedBox(height: 24.h),
+                              _isLoading
+                                  ? const ShimmerExperienceSection()
+                                  : ExperienceSection(
+                                      experiences: _experienceList,
+                                    ),
                             ],
                           ),
                         ),

@@ -1,4 +1,3 @@
-import 'package:dmpportfolioapp/features/projects/data/models/project_model.dart';
 import 'package:dmpportfolioapp/features/projects/domain/entities/project_entity.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_card_button.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_skills_laber.dart';

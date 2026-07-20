@@ -4,6 +4,7 @@ import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_
 import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_event.dart';
 import 'package:dmpportfolioapp/features/education/presentation/bloc/edaduation_state.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/eduaction_title_widget.dart';
+import 'package:dmpportfolioapp/features/education/presentation/widgets/shimmer_eduaction_detaile_card.dart';
 import 'package:dmpportfolioapp/features/education/presentation/widgets/education_qualifications_section.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -87,8 +88,15 @@ class _EduactionViewState extends State<EduactionView> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.amber),
+      return ListView.builder(
+        itemCount: 3,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 16.h),
+            child: const ShimmerEduactionDetaileCard(),
+          );
+        },
       );
     }
 

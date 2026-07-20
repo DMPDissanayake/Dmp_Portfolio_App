@@ -4,6 +4,7 @@ import 'package:dmpportfolioapp/features/about/presentation/bloc/about_bloc.dart
 import 'package:dmpportfolioapp/features/about/presentation/bloc/about_event.dart';
 import 'package:dmpportfolioapp/features/about/presentation/bloc/about_state.dart';
 import 'package:dmpportfolioapp/features/about/presentation/widgets/profile_deteile_card.dart';
+import 'package:dmpportfolioapp/features/about/presentation/widgets/shimmer_profile_deteile_card.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
@@ -70,10 +71,7 @@ class _AboutViewState extends State<AboutView> {
               },
               child: Column(
                 children: [
-                  if (_isLoading)
-                    const Expanded(
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
+                  if (_isLoading) const ShimmerProfileDeteileCard(),
                   if (profileEntity != null)
                     Expanded(
                       child: Column(

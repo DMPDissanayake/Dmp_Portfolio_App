@@ -67,7 +67,7 @@ class _AccessCardState extends State<AccessCard> {
               Text(
                 widget.name,
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 8.sp,
                   color: AppColors.initColors().textBlackColor1,
                   fontWeight: FontWeight.bold,
                 ),

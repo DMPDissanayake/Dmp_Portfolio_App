@@ -1,8 +1,11 @@
-import 'package:dmpportfolioapp/core/di/injection_container.dart'; // 💡 sl එක සඳහා මේක ඇතුළත් කළා
+import 'package:dmpportfolioapp/core/di/injection_container.dart';
 import 'package:dmpportfolioapp/features/about/presentation/bloc/about_event.dart';
+import 'package:dmpportfolioapp/features/home/presentation/widgets/home_baner_mobile_shimmer.dart';
 import 'package:dmpportfolioapp/features/home/presentation/widgets/home_banner.dart';
 import 'package:dmpportfolioapp/features/home/data/models/entity/skill_data.dart';
 import 'package:dmpportfolioapp/features/home/presentation/widgets/premium_skill_line_chart.dart';
+import 'package:dmpportfolioapp/features/home/presentation/widgets/premium_skill_line_chart_shimmer.dart';
+import 'package:dmpportfolioapp/features/home/presentation/widgets/quick_access_card_shimmer.dart';
 import 'package:dmpportfolioapp/features/home/presentation/widgets/quick_access_card.dart';
 import 'package:dmpportfolioapp/features/about/presentation/bloc/about_bloc.dart';
 import 'package:dmpportfolioapp/features/about/presentation/bloc/about_state.dart';
@@ -10,6 +13,7 @@ import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_bloc
 import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_event.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_state.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_card.dart';
+import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_card_shimmer.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:dmpportfolioapp/utils/app_images.dart';
@@ -47,17 +51,13 @@ class _HomeViewState extends State<HomeView> {
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(gradient: AppColors.initColors().appBGColor),
-        // 💡 1.  MultiBlocProvider
         child: MultiBlocProvider(
           providers: [
             BlocProvider<ProfileBloc>(
-              create: (context) =>
-                  sl<ProfileBloc>()
-                    ..add(FetchProfileData()), // 💡 Profile Data load
+              create: (context) => sl<ProfileBloc>()..add(FetchProfileData()),
             ),
             BlocProvider<ProjectBloc>(
-              create: (context) =>
-                  sl<ProjectBloc>()..add(FetchProjectData()), // 💡 Project Data
+              create: (context) => sl<ProjectBloc>()..add(FetchProjectData()),
             ),
           ],
           child: SafeArea(
@@ -68,136 +68,68 @@ class _HomeViewState extends State<HomeView> {
                   // 👤 Profile Header Section
                   BlocBuilder<ProfileBloc, ProfileState>(
                     builder: (context, state) {
-                      if (state is ProfileLoaded) {
-                        return InkWell(
-                          onTap: () {
-                            widget.onChangeTab(4, data: state.data);
-                          },
-                          child: HomeBanner(profileEntity: state.data),
+                      if (state is ProfileLoading) {
+                        return Column(
+                          children: [
+                            const MobileHomeBannerShimmer(),
+                            SizedBox(height: 12.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
+                              // 💡 FIX: Wrap ඇතුළේ Expanded ඉවත් කර ලස්සනට responsive grid එකක් ලෙස සකසා ඇත.
+                              child: isMobile
+                                  ? Wrap(
+                                      alignment: WrapAlignment.center,
+                                      spacing: 8.w,
+                                      runSpacing: 8.h,
+                                      children: const [
+                                        AccessCardShimmer(),
+                                        AccessCardShimmer(),
+                                        AccessCardShimmer(),
+                                        AccessCardShimmer(),
+                                      ],
+                                    )
+                                  : const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(child: AccessCardShimmer()),
+                                        Expanded(child: AccessCardShimmer()),
+                                        Expanded(child: AccessCardShimmer()),
+                                        Expanded(child: AccessCardShimmer()),
+                                      ],
+                                    ),
+                            ),
+                            SizedBox(height: 8.h),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: PremiumSkillLineChartShimmer(),
+                            ),
+                          ],
                         );
+                      } else if (state is ProfileLoaded) {
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                widget.onChangeTab(4, data: state.data);
+                              },
+                              child: HomeBanner(profileEntity: state.data),
+                            ),
+                            SizedBox(height: 12.h),
+                            _buildQuickAccessSection(isMobile),
+                            SizedBox(height: 8.h),
+                            _buildTechnicalSkillsSection(),
+                          ],
+                        );
+                      } else if (state is ProfileError) {
+                        return Center(child: Text(state.message));
                       }
                       return const SizedBox.shrink();
                     },
                   ),
-                  SizedBox(height: 12.h),
-
-                  // ⚡ 2. Quick Access Section
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: Column(
-                      children: [
-                        if (isMobile)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'My Skills',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: AppDimensions.kFontSize14,
-                                    height: AppDimensions.kLineHeight14(18),
-                                    letterSpacing:
-                                        AppDimensions.kLetterSpacing14(-2.5),
-                                    color:
-                                        AppColors.initColors().textBlackColor1,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () =>
-                                    widget.onChangeTab(1), // Skills Tab
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'See All',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: AppDimensions.kFontSize12,
-                                        height: AppDimensions.kLineHeight14(18),
-                                        letterSpacing:
-                                            AppDimensions.kLetterSpacing14(
-                                              -2.5,
-                                            ),
-                                        color:
-                                            AppColors.initColors().primaryColor,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    SvgPicture.asset(
-                                      AppImages.svgRightArrow,
-                                      fit: BoxFit.cover,
-                                      color:
-                                          AppColors.initColors().primaryColor,
-                                      width: 18.w,
-                                      height: 18.h,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(height: 8.h),
-                        if (isMobile)
-                          Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            spacing: 8.w,
-                            runSpacing: 8.h,
-                            children: [
-                              AccessCard(
-                                name: 'Technical',
-                                icon: AppImages.svgTechnical,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Professional',
-                                icon: AppImages.svgProfessional,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Achievements',
-                                icon: AppImages.svgTrophy,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Learning',
-                                icon: AppImages.svgLearning,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                            ],
-                          ),
-                        if (!isMobile)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              AccessCard(
-                                name: 'Technical',
-                                icon: AppImages.svgTechnical,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Professional',
-                                icon: AppImages.svgProfessional,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Achievements',
-                                icon: AppImages.svgTrophy,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                              AccessCard(
-                                name: 'Learning',
-                                icon: AppImages.svgLearning,
-                                onTap: () => widget.onChangeTab(1),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 8.h),
 
-                  // 🚀 3. Featured Projects Section (Horizontal List)
+                  // 🚀 Featured Projects Section
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Row(
@@ -218,7 +150,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => widget.onChangeTab(2), // Projects Tab
+                          onTap: () => widget.onChangeTab(2),
                           child: Row(
                             children: [
                               Text(
@@ -251,20 +183,42 @@ class _HomeViewState extends State<HomeView> {
 
                   BlocBuilder<ProjectBloc, ProjectState>(
                     builder: (context, state) {
+                      final isMobile = ResponsiveBreakpoints.of(
+                        context,
+                      ).isMobile;
                       if (state is ProjectLoading) {
-                        return SizedBox(
-                          height: 200.h,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
+                        if (isMobile) {
+                          return SizedBox(
+                            height: 280.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 8.w),
+                                  child: const ProjectCardShimmer(),
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Column(
+                              children: [
+                                ProjectCardShimmer(),
+                                ProjectCardShimmer(),
+                              ],
+                            ),
+                          );
+                        }
                       } else if (state is ProjectLoaded) {
                         final featuredProjects = state.projectList
                             .take(3)
-                            .toList(); // We only want to show a few featured projects.
+                            .toList();
 
                         if (isMobile) {
-                          // Horizontal list for mobile
                           return SizedBox(
                             height: 280.h,
                             child: ListView.builder(
@@ -282,7 +236,6 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           );
                         } else {
-                          // Vertical list for web/desktop
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.w),
                             child: Column(
@@ -305,71 +258,177 @@ class _HomeViewState extends State<HomeView> {
                     },
                   ),
 
-                  SizedBox(height: 16.h),
-
-                  // 📊 4. Technical Skills Chart Section
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Technical Skills',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: AppDimensions.kFontSize14,
-                                  height: AppDimensions.kLineHeight14(18),
-                                  letterSpacing: AppDimensions.kLetterSpacing14(
-                                    -2.5,
-                                  ),
-                                  color: AppColors.initColors().textBlackColor1,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () => widget.onChangeTab(1),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'See All',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: AppDimensions.kFontSize12,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
-                                      color:
-                                          AppColors.initColors().primaryColor,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  SvgPicture.asset(
-                                    AppImages.svgRightArrow,
-                                    fit: BoxFit.cover,
-                                    color: AppColors.initColors().primaryColor,
-                                    width: 18.w,
-                                    height: 18.h,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.h),
-                        PremiumSkillLineChart(skills: mySkills),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 24.h),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  // ⚡ Quick Access Section
+  Widget _buildQuickAccessSection(bool isMobile) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Column(
+        children: [
+          if (isMobile)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    'My Skills',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: AppDimensions.kFontSize14,
+                      height: AppDimensions.kLineHeight14(18),
+                      letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                      color: AppColors.initColors().textBlackColor1,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => widget.onChangeTab(1),
+                  child: Row(
+                    children: [
+                      Text(
+                        'See All',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: AppDimensions.kFontSize12,
+                          height: AppDimensions.kLineHeight14(18),
+                          letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                          color: AppColors.initColors().primaryColor,
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      SvgPicture.asset(
+                        AppImages.svgRightArrow,
+                        fit: BoxFit.cover,
+                        color: AppColors.initColors().primaryColor,
+                        width: 18.w,
+                        height: 18.h,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          SizedBox(height: 8.h),
+          if (isMobile)
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                AccessCard(
+                  name: 'Technical',
+                  icon: AppImages.svgTechnical,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Professional',
+                  icon: AppImages.svgProfessional,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Achievements',
+                  icon: AppImages.svgTrophy,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Learning',
+                  icon: AppImages.svgLearning,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+              ],
+            ),
+          if (!isMobile)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AccessCard(
+                  name: 'Technical',
+                  icon: AppImages.svgTechnical,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Professional',
+                  icon: AppImages.svgProfessional,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Achievements',
+                  icon: AppImages.svgTrophy,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+                AccessCard(
+                  name: 'Learning',
+                  icon: AppImages.svgLearning,
+                  onTap: () => widget.onChangeTab(1),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  // 📊 Technical Skills Chart Section
+  Widget _buildTechnicalSkillsSection() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'Technical Skills',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: AppDimensions.kFontSize14,
+                    height: AppDimensions.kLineHeight14(18),
+                    letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                    color: AppColors.initColors().textBlackColor1,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => widget.onChangeTab(1),
+                child: Row(
+                  children: [
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: AppDimensions.kFontSize12,
+                        height: AppDimensions.kLineHeight14(18),
+                        letterSpacing: AppDimensions.kLetterSpacing14(-2.5),
+                        color: AppColors.initColors().primaryColor,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    SvgPicture.asset(
+                      AppImages.svgRightArrow,
+                      fit: BoxFit.cover,
+                      color: AppColors.initColors().primaryColor,
+                      width: 18.w,
+                      height: 18.h,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          PremiumSkillLineChart(skills: mySkills),
+        ],
       ),
     );
   }

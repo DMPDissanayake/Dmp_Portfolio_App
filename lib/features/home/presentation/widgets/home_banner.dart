@@ -34,7 +34,7 @@ class _HomeBannerState extends State<HomeBanner> {
   Widget _buildMobileBanner() {
     return Container(
       width: double.infinity,
-      height: 0,
+      //height: 0,
       margin: EdgeInsets.zero,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(

@@ -5,6 +5,7 @@ import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_bloc
 import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_event.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/bloc/project_state.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/detaile_project_card.dart';
+import 'package:dmpportfolioapp/features/projects/presentation/widgets/shimmer_detaile_project_card.dart';
 import 'package:dmpportfolioapp/features/projects/presentation/widgets/project_title_widget.dart';
 import 'package:dmpportfolioapp/shared/common/custom_segmented_control_widget.dart';
 import 'package:dmpportfolioapp/utils/app_colors.dart';
@@ -114,16 +115,31 @@ class _ProjectViewState extends State<ProjectView> {
                           ),
                           const SizedBox(height: 16),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: _organizationProjectList.length,
-                              itemBuilder: (context, index) {
-                                final project = _organizationProjectList[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16.0),
-                                  child: DetaileProjectCard(project: project),
-                                );
-                              },
-                            ),
+                            child: _isLoading
+                                ? ListView.builder(
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return const Padding(
+                                        padding: EdgeInsets.only(bottom: 16.0),
+                                        child: ShimmerDetaileProjectCard(),
+                                      );
+                                    },
+                                  )
+                                : ListView.builder(
+                                    itemCount: _organizationProjectList.length,
+                                    itemBuilder: (context, index) {
+                                      final project =
+                                          _organizationProjectList[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 16.0,
+                                        ),
+                                        child: DetaileProjectCard(
+                                          project: project,
+                                        ),
+                                      );
+                                    },
+                                  ),
                           ),
                         ],
                       ),
@@ -140,16 +156,31 @@ class _ProjectViewState extends State<ProjectView> {
                           ),
                           const SizedBox(height: 16),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: _personalProjectList.length,
-                              itemBuilder: (context, index) {
-                                final project = _personalProjectList[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16.0),
-                                  child: DetaileProjectCard(project: project),
-                                );
-                              },
-                            ),
+                            child: _isLoading
+                                ? ListView.builder(
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return const Padding(
+                                        padding: EdgeInsets.only(bottom: 16.0),
+                                        child: ShimmerDetaileProjectCard(),
+                                      );
+                                    },
+                                  )
+                                : ListView.builder(
+                                    itemCount: _personalProjectList.length,
+                                    itemBuilder: (context, index) {
+                                      final project =
+                                          _personalProjectList[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 16.0,
+                                        ),
+                                        child: DetaileProjectCard(
+                                          project: project,
+                                        ),
+                                      );
+                                    },
+                                  ),
                           ),
                         ],
                       ),
