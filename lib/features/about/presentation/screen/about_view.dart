@@ -106,10 +106,22 @@ class _AboutViewState extends State<AboutView> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.r),
                                   child: Image.network(
-                                    profileEntity?.profileUrl ?? '',
+                                    profileEntity!.profileUrl,
                                     height: 120.h,
                                     width: 120.w,
                                     fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        height: 120.h,
+                                        width: 120.w,
+                                        color: Colors.grey[300],
+                                        child: const Icon(
+                                          Icons.person,
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),

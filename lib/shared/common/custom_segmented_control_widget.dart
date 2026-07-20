@@ -2,6 +2,7 @@ import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class TabTata {
   final int id;
@@ -31,6 +32,9 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
+
+  // Tracks which unselected tab is currently hovered (web only)
+  int? _hoveredId;
 
   @override
   void initState() {
@@ -63,6 +67,14 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    return isMobile ? _buildMobile() : _buildWeb();
+  }
+
+  // ---------------------------------------------------------------------
+  // MOBILE (unchanged)
+  // ---------------------------------------------------------------------
+  Widget _buildMobile() {
     return Container(
       height: 44.h,
       padding: const EdgeInsets.all(4),
@@ -74,7 +86,6 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
         children: widget.tabs.map((tab) {
           final bool isSelected = widget.selectedId == tab.id;
 
-          // 1. Build the base container for the tab
           Widget tabContent = AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             alignment: Alignment.center,
@@ -107,7 +118,6 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
             ),
           );
 
-          // 2. ONLY wrap with the scale animation builder if the tab is selected
           if (isSelected) {
             tabContent = AnimatedBuilder(
               animation: _animationController,
@@ -125,6 +135,89 @@ class _CustomSegmentedControlState extends State<CustomSegmentedControl>
             child: GestureDetector(
               onTap: () => widget.onTabSelected(tab),
               child: tabContent,
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // WEB / DESKTOP — hoverable pill control
+  // ---------------------------------------------------------------------
+  Widget _buildWeb() {
+    return Container(
+      height: 48,
+      width: double.infinity,
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: AppColors.initColors().primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: widget.tabs.map((tab) {
+          final bool isSelected = widget.selectedId == tab.id;
+          final bool isHovered = _hoveredId == tab.id;
+
+          Widget tabContent = AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: isSelected ? AppColors.initColors().tabBarColor : null,
+              color: isSelected
+                  ? null
+                  : (isHovered
+                        ? AppColors.initColors().nonChangeWhite.withOpacity(
+                            0.12,
+                          )
+                        : Colors.transparent),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.initColors().nonChangeBlack
+                            .withOpacity(0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : [],
+            ),
+            child: Text(
+              tab.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                letterSpacing: 0,
+                color: isSelected
+                    ? AppColors.initColors().primaryColor
+                    : AppColors.initColors().nonChangeWhite,
+              ),
+            ),
+          );
+
+          if (isSelected) {
+            tabContent = AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: child,
+                );
+              },
+              child: tabContent,
+            );
+          }
+
+          return Expanded(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => setState(() => _hoveredId = tab.id),
+              onExit: (_) => setState(() => _hoveredId = null),
+              child: GestureDetector(
+                onTap: () => widget.onTabSelected(tab),
+                child: tabContent,
+              ),
             ),
           );
         }).toList(),

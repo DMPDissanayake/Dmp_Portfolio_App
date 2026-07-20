@@ -2,6 +2,7 @@ import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class CustomTabBar extends StatefulWidget {
   final int selectedIndex;
@@ -16,7 +17,6 @@ class CustomTabBar extends StatefulWidget {
     this.savedOrderCount = 0,
     required this.selectedIndex,
     required this.onTabSelected,
-
     required this.tabs,
   }) : super(key: key);
 
@@ -38,13 +38,15 @@ class _CustomTabBarState extends State<CustomTabBar>
   late Animation<double> _tabFadeAnimation;
   late Animation<double> _tabSlideAnimation;
 
+  // Tracks which unselected tab is hovered (web only)
+  int? _hoveredIndex;
+
   @override
   void initState() {
     super.initState();
 
-    // Tab selection animations
     _tabController = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
@@ -60,16 +62,15 @@ class _CustomTabBarState extends State<CustomTabBar>
 
     _tabController.forward();
 
-    // Search open/close animations
     _searchController = AnimationController(
-      duration: Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 350),
       vsync: this,
     );
 
     _tabFadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _searchController,
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
       ),
     );
 
@@ -95,9 +96,16 @@ class _CustomTabBarState extends State<CustomTabBar>
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    return isMobile ? _buildMobile() : _buildWeb();
+  }
+
+  // ---------------------------------------------------------------------
+  // MOBILE (unchanged)
+  // ---------------------------------------------------------------------
+  Widget _buildMobile() {
     return Stack(
       children: [
-        // Tab bar row — fades + slides out when search opens
         AnimatedBuilder(
           animation: _searchController,
           builder: (context, child) {
@@ -154,7 +162,7 @@ class _CustomTabBarState extends State<CustomTabBar>
                                                 0.08 * _opacityAnimation.value,
                                               ),
                                               blurRadius: 12,
-                                              offset: Offset(0, 4),
+                                              offset: const Offset(0, 4),
                                             ),
                                           ]
                                         : [],
@@ -194,6 +202,101 @@ class _CustomTabBarState extends State<CustomTabBar>
           ),
         ),
       ],
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // WEB / DESKTOP — evenly spaced pill tabs with hover states
+  // ---------------------------------------------------------------------
+  Widget _buildWeb() {
+    return AnimatedBuilder(
+      animation: _searchController,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _tabFadeAnimation.value,
+          child: Transform.translate(
+            offset: Offset(_tabSlideAnimation.value, 0),
+            child: IgnorePointer(ignoring: _isSearch, child: child),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.initColors().primaryColor,
+          borderRadius: BorderRadius.circular(360),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(widget.tabs.length, (index) {
+            final isSelected = widget.selectedIndex == index;
+            final isHovered = _hoveredIndex == index;
+
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => setState(() => _hoveredIndex = index),
+              onExit: (_) => setState(() => _hoveredIndex = null),
+              child: GestureDetector(
+                onTap: () => widget.onTabSelected(index),
+                child: AnimatedBuilder(
+                  animation: _tabController,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: isSelected ? _scaleAnimation.value : 1.0,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        constraints: const BoxConstraints(minWidth: 90),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSelected ? 20 : 16,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: isSelected
+                              ? AppColors.initColors().tabBarColor
+                              : null,
+                          color: isSelected
+                              ? null
+                              : (isHovered
+                                    ? AppColors.initColors().nonChangeWhite
+                                          .withOpacity(0.12)
+                                    : Colors.transparent),
+                          borderRadius: BorderRadius.circular(360),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(
+                                      0.08 * _opacityAnimation.value,
+                                    ),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: Center(
+                          child: Text(
+                            widget.tabs[index],
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w500,
+                              color: isSelected
+                                  ? AppColors.initColors().primaryColor
+                                  : AppColors.initColors().nonChangeWhite,
+                              letterSpacing: 0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
     );
   }
 }

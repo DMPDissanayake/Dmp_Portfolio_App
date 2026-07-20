@@ -6,7 +6,8 @@ import 'package:dmpportfolioapp/features/projects/presentation/screen/project_vi
 import 'package:dmpportfolioapp/features/skils/presentation/screen/skils_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:responsive_framework/responsive_framework.dart'; // 👈 මේක ඇතුලත් කරන්න
+import 'package:flutter_svg/svg.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_images.dart';
 
@@ -32,9 +33,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. දැනට තියෙන්නේ Mobile ද නැද්ද කියලා check කරගන්නවා
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-
     return PopScope(
       canPop: selectedTab == 0,
       onPopInvokedWithResult: (didPop, result) async {
@@ -45,22 +44,16 @@ class _DashboardViewState extends State<DashboardView> {
       },
       child: Scaffold(
         backgroundColor: AppColors.initColors().whiteBackgroundColor,
-        // 2. Mobile නෙමෙයි නම් (Tablet/Desktop) Side Menu එකත් එක්ක Row එකක් ඇතුලේ Body එක දානවා
         body: SafeArea(
           child: isMobile
-              ? Stack(children: [_getBody()]) // Mobile Layout
+              ? Stack(children: [_getNavBody()]) // Mobile Layout
               : Row(
                   children: [
-                    _buildSideMenu(), // 👈 Desktop/Tablet වලදී වම් පැත්තේ පෙනෙන Side Menu එක
-                    const VerticalDivider(
-                      thickness: 1,
-                      width: 1,
-                    ), // පොඩි separation එකක් සඳහා
-                    Expanded(child: Stack(children: [_getBody()])),
+                    _buildSideMenu(), // Web/Desktop side navigation
+                    Expanded(child: Stack(children: [_getNavBody()])),
                   ],
                 ),
         ),
-        // 3. Mobile වලදී විතරක් Bottom Navigation Bar එක පෙන්වනවා
         bottomNavigationBar: isMobile ? _buildBottomNavigationBar() : null,
       ),
     );
@@ -75,7 +68,7 @@ class _DashboardViewState extends State<DashboardView> {
     });
   }
 
-  // --- Mobile Bottom Navigation Bar ---
+  // --- Mobile Bottom Navigation Bar (unchanged) ---
   Widget _buildBottomNavigationBar() {
     return Container(
       padding: EdgeInsets.only(bottom: 15.h),
@@ -83,43 +76,76 @@ class _DashboardViewState extends State<DashboardView> {
         color: AppColors.initColors().nonChangeWhite,
         boxShadow: const [
           BoxShadow(
-            offset: Offset(4, 0),
-            blurRadius: 24,
+            offset: Offset(0, -2),
+            blurRadius: 10,
             spreadRadius: 0,
-            color: Color(0x3D000000),
+            color: Color(0x1A000000),
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _getNavItems().map((item) => Expanded(child: item)).toList(),
+        children: _getNavItems()
+            .map(
+              (item) => Expanded(
+                child: BottomBarItem(
+                  name: item.name,
+                  selectedIcon: item.icon,
+                  onTap: () => changeTab(item.index),
+                  isSelected: selectedTab == item.index,
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
-  // --- Web / Desktop Side Menu ---
+  // --- Web / Desktop Side Menu — narrow icon-only rail ---
   Widget _buildSideMenu() {
+    final primary = AppColors.initColors().primaryColor;
+
     return Container(
-      width: 240, // Side menu එකට ගැලපෙන පළලක් (Width) මෙතනින් දෙන්න
-      color: AppColors.initColors().nonChangeWhite,
-      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+      width: 84,
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: AppColors.initColors().nonChangeWhite,
+        border: Border(
+          right: BorderSide(color: primary.withOpacity(0.10), width: 1),
+        ),
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // App Logo එක හෝ Title එක මෙතනට දාන්න පුළුවන්
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              "Portfolio",
-              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: primary,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.workspace_premium,
+              color: Colors.white,
+              size: 20,
             ),
           ),
-          SizedBox(height: 30.h),
-          // Navigation Items ටික Column එකක් ඇතුලේ සිරස්ව (Vertically) පෙන්වනවා
-          ..._getNavItems().map(
-            (item) => Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: item,
+          const SizedBox(height: 36),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: _getNavItems()
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: _SideNavTile(
+                        name: item.name,
+                        icon: item.icon,
+                        isSelected: selectedTab == item.index,
+                        onTap: () => changeTab(item.index),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ],
@@ -127,42 +153,17 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  List<Widget> _getNavItems() {
-    return [
-      BottomBarItem(
-        name: 'Home',
-        selectedIcon: AppImages.svgHome,
-        onTap: () => changeTab(0),
-        isSelected: selectedTab == 0,
-      ),
-      BottomBarItem(
-        name: 'Skills',
-        selectedIcon: AppImages.svgSkills,
-        onTap: () => changeTab(1),
-        isSelected: selectedTab == 1,
-      ),
-      BottomBarItem(
-        name: 'Projects',
-        selectedIcon: AppImages.svgProject,
-        onTap: () => changeTab(2),
-        isSelected: selectedTab == 2,
-      ),
-      BottomBarItem(
-        name: 'Education',
-        selectedIcon: AppImages.svgEducation,
-        onTap: () => changeTab(3),
-        isSelected: selectedTab == 3,
-      ),
-      BottomBarItem(
-        name: 'Profile',
-        selectedIcon: AppImages.svgProfile,
-        onTap: () => changeTab(4),
-        isSelected: selectedTab == 4,
-      ),
+  List<_NavItemData> _getNavItems() {
+    return const [
+      _NavItemData(name: 'Home', icon: AppImages.svgHome, index: 0),
+      _NavItemData(name: 'Skills', icon: AppImages.svgSkills, index: 1),
+      _NavItemData(name: 'Projects', icon: AppImages.svgProject, index: 2),
+      _NavItemData(name: 'Education', icon: AppImages.svgEducation, index: 3),
+      _NavItemData(name: 'Profile', icon: AppImages.svgProfile, index: 4),
     ];
   }
 
-  Widget _getBody() {
+  Widget _getNavBody() {
     switch (selectedTab) {
       case 0:
         return HomeView(onChangeTab: changeTab, data: tabData);
@@ -177,5 +178,105 @@ class _DashboardViewState extends State<DashboardView> {
       default:
         return HomeView(onChangeTab: changeTab, data: tabData);
     }
+  }
+}
+
+class _NavItemData {
+  final String name;
+  final String icon;
+  final int index;
+  const _NavItemData({
+    required this.name,
+    required this.icon,
+    required this.index,
+  });
+}
+
+// ---------------------------------------------------------------------
+// Web sidebar tile — icon-only circular button, name shown via tooltip
+// ---------------------------------------------------------------------
+class _SideNavTile extends StatefulWidget {
+  final String name;
+  final String icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _SideNavTile({
+    required this.name,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  State<_SideNavTile> createState() => _SideNavTileState();
+}
+
+class _SideNavTileState extends State<_SideNavTile> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = AppColors.initColors().primaryColor;
+    final isActive = widget.isSelected;
+
+    return Center(
+      child: Tooltip(
+        message: widget.name,
+        preferBelow: false,
+        verticalOffset: 28,
+        decoration: BoxDecoration(
+          color: AppColors.initColors().textBlackColor1,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        textStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: widget.onTap,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isActive
+                    ? primary
+                    : (_isHovered
+                          ? primary.withOpacity(0.10)
+                          : Colors.transparent),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: primary.withOpacity(0.35),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  widget.icon,
+                  height: 20,
+                  width: 20,
+                  color: isActive
+                      ? Colors.white
+                      : AppColors.initColors().textBlackColor1.withOpacity(
+                          0.55,
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

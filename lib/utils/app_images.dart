@@ -4,6 +4,7 @@ class AppImages {
   // static const String icVisibilityOff = 'images/png/ic_visibility_off.png';
   static const String homeBenner = 'images/png/home_benner.png';
   static const String projectExPng = 'images/png/Capture.png';
+  static const String profilePng = 'images/png/pushpe.png';
 
   /// SVG
   static const String svgHome = 'images/svg/svg_home.svg';

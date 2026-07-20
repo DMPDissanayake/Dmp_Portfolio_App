@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class HomeView extends StatefulWidget {
   final Function(int, {dynamic data}) onChangeTab;
@@ -38,6 +39,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -83,80 +86,112 @@ class _HomeViewState extends State<HomeView> {
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'My Skills',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: AppDimensions.kFontSize14,
-                                  height: AppDimensions.kLineHeight14(18),
-                                  letterSpacing: AppDimensions.kLetterSpacing14(
-                                    -2.5,
+                        if (isMobile)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'My Skills',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AppDimensions.kFontSize14,
+                                    height: AppDimensions.kLineHeight14(18),
+                                    letterSpacing:
+                                        AppDimensions.kLetterSpacing14(-2.5),
+                                    color:
+                                        AppColors.initColors().textBlackColor1,
                                   ),
-                                  color: AppColors.initColors().textBlackColor1,
                                 ),
                               ),
-                            ),
-                            InkWell(
-                              onTap: () => widget.onChangeTab(1), // Skills Tab
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'See All',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: AppDimensions.kFontSize12,
-                                      height: AppDimensions.kLineHeight14(18),
-                                      letterSpacing:
-                                          AppDimensions.kLetterSpacing14(-2.5),
+                              InkWell(
+                                onTap: () =>
+                                    widget.onChangeTab(1), // Skills Tab
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'See All',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: AppDimensions.kFontSize12,
+                                        height: AppDimensions.kLineHeight14(18),
+                                        letterSpacing:
+                                            AppDimensions.kLetterSpacing14(
+                                              -2.5,
+                                            ),
+                                        color:
+                                            AppColors.initColors().primaryColor,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    SvgPicture.asset(
+                                      AppImages.svgRightArrow,
+                                      fit: BoxFit.cover,
                                       color:
                                           AppColors.initColors().primaryColor,
+                                      width: 18.w,
+                                      height: 18.h,
                                     ),
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  SvgPicture.asset(
-                                    AppImages.svgRightArrow,
-                                    fit: BoxFit.cover,
-                                    color: AppColors.initColors().primaryColor,
-                                    width: 18.w,
-                                    height: 18.h,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         SizedBox(height: 8.h),
-                        Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          spacing: 8.w,
-                          runSpacing: 8.h,
-                          children: [
-                            AccessCard(
-                              name: 'Technical',
-                              icon: AppImages.svgTechnical,
-                              onTap: () => widget.onChangeTab(1),
-                            ),
-                            AccessCard(
-                              name: 'Professional',
-                              icon: AppImages.svgProfessional,
-                              onTap: () => widget.onChangeTab(1),
-                            ),
-                            AccessCard(
-                              name: 'Achievements',
-                              icon: AppImages.svgTrophy,
-                              onTap: () => widget.onChangeTab(1),
-                            ),
-                            AccessCard(
-                              name: 'Learning',
-                              icon: AppImages.svgLearning,
-                              onTap: () => widget.onChangeTab(1),
-                            ),
-                          ],
-                        ),
+                        if (isMobile)
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            spacing: 8.w,
+                            runSpacing: 8.h,
+                            children: [
+                              AccessCard(
+                                name: 'Technical',
+                                icon: AppImages.svgTechnical,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Professional',
+                                icon: AppImages.svgProfessional,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Achievements',
+                                icon: AppImages.svgTrophy,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Learning',
+                                icon: AppImages.svgLearning,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                            ],
+                          ),
+                        if (!isMobile)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              AccessCard(
+                                name: 'Technical',
+                                icon: AppImages.svgTechnical,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Professional',
+                                icon: AppImages.svgProfessional,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Achievements',
+                                icon: AppImages.svgTrophy,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                              AccessCard(
+                                name: 'Learning',
+                                icon: AppImages.svgLearning,
+                                onTap: () => widget.onChangeTab(1),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -226,23 +261,40 @@ class _HomeViewState extends State<HomeView> {
                       } else if (state is ProjectLoaded) {
                         final featuredProjects = state.projectList
                             .take(3)
-                            .toList();
-                        return SizedBox(
-                          height: 280.h,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: featuredProjects.length,
+                            .toList(); // We only want to show a few featured projects.
+
+                        if (isMobile) {
+                          // Horizontal list for mobile
+                          return SizedBox(
+                            height: 280.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: featuredProjects.length,
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 8.w),
+                                  child: ProjectCard(
+                                    project: featuredProjects[index],
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          // Vertical list for web/desktop
+                          return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8.w),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(right: 8.w),
-                                child: ProjectCard(
-                                  project: featuredProjects[index],
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                            child: Column(
+                              children: featuredProjects.map((project) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 8.h),
+                                  child: ProjectCard(project: project),
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        }
                       }
                       return SizedBox(
                         height: 200.h,

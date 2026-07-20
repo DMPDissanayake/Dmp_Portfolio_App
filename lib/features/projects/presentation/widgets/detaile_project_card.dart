@@ -40,6 +40,7 @@ class DetaileProjectCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
