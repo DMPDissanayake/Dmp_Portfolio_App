@@ -1,4 +1,5 @@
-part of 'edaduation_bloc.dart';
+abstract class EducationEvent {
+  const EducationEvent();
+}
 
-@immutable
-sealed class EdaduationEvent {}
+class FetchEducationData extends EducationEvent {}

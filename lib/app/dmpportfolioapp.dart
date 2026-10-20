@@ -1,6 +1,7 @@
 import 'package:dmpportfolioapp/utils/app_colors.dart';
 import 'package:dmpportfolioapp/utils/app_constants.dart';
 import 'package:dmpportfolioapp/utils/app_navigation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -10,10 +11,8 @@ class DmpPortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Wrap your app with ScreenUtilInit
     return ScreenUtilInit(
-      // Provide the design size for your app
-      designSize: const Size(360, 690),
+      designSize: kIsWeb ? const Size(1440, 900) : const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {

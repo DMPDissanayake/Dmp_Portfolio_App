@@ -1,6 +1,21 @@
-part of 'edaduation_bloc.dart';
+import '../../domain/entities/education_entity.dart';
 
-@immutable
-sealed class EdaduationState {}
+abstract class EducationState {
+  const EducationState();
+}
 
-final class EdaduationInitial extends EdaduationState {}
+class EducationInitial extends EducationState {}
+
+class EducationLoading extends EducationState {}
+
+class EducationLoaded extends EducationState {
+  final List<EducationEntity> educationList;
+
+  const EducationLoaded({required this.educationList});
+}
+
+class EducationError extends EducationState {
+  final String message;
+
+  const EducationError({required this.message});
+}

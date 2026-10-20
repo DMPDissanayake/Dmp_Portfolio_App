@@ -4,6 +4,7 @@ class AppImages {
   // static const String icVisibilityOff = 'images/png/ic_visibility_off.png';
   static const String homeBenner = 'images/png/home_benner.png';
   static const String projectExPng = 'images/png/Capture.png';
+  static const String profilePng = 'images/png/pushpe.png';
 
   /// SVG
   static const String svgHome = 'images/svg/svg_home.svg';
@@ -19,6 +20,24 @@ class AppImages {
   static const String svgEv = 'images/svg/svg_ev.svg';
   static const String svgUrl = 'images/svg/svg_url.svg';
   static const String svgGithub = 'images/svg/svg_github.svg';
+  static const String svgMobileDelopment = 'images/svg/svg_mobile_dev.svg';
+  static const String svgAdaptability = 'images/svg/svg_Adaptability.svg';
+  static const String svgAgile = 'images/svg/svg_agile.svg';
+  static const String svgAttention = 'images/svg/svg_attention.svg';
+  static const String svgClient = 'images/svg/svg_client.svg';
+  static const String svgCommunication = 'images/svg/svg_communication.svg';
+  static const String svgLeadership = 'images/svg/svg_leadership.svg';
+  static const String svgLearning2 = 'images/svg/svg_learning2.svg';
+  static const String svgProblemsolving = 'images/svg/svg_problemsolving.svg';
+  static const String svgRequirement = 'images/svg/svg_requirement.svg';
+  static const String svgTeam = 'images/svg/svg_team.svg';
+  static const String svgTime = 'images/svg/svg_time.svg';
+  static const String svgAI = 'images/svg/svg_ai.svg';
+  static const String svgCompany = 'images/svg/svg_company.svg';
+  static const String svgUniversity = 'images/svg/svg_university.svg';
+  static const String svgCertification = 'images/svg/svg_certification.svg';
+  static const String svgContact = 'images/svg/svg_contact.svg';
+  static const String svgDownload = 'images/svg/svg_download.svg';
 
   /// Animetion
   static const String mADevelopment =
