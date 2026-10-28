@@ -1,4 +1,5 @@
-part of 'project_bloc.dart';
+abstract class ProjectEvent {
+  const ProjectEvent();
+}
 
-@immutable
-sealed class ProjectEvent {}
+class FetchProjectData extends ProjectEvent {}

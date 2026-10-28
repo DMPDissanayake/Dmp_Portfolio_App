@@ -1,4 +1,5 @@
-part of 'about_bloc.dart';
+abstract class ProfileEvent {
+  const ProfileEvent();
+}
 
-@immutable
-sealed class AboutEvent {}
+class FetchProfileData extends ProfileEvent {}

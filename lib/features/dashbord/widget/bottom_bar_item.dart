@@ -20,54 +20,50 @@ class BottomBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        // Using focusColor/highlightColor transparent to clean up the tap effect
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            /// --- This is the Top Border Indicator ---
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: EdgeInsets.only(
-                bottom: 10.h,
-              ), // Space between bar and icon
-              height: 5.h, // Thickness of the line
-              width: 35.w, // Width of the line
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.initColors().primaryColor
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(2.r),
-              ),
+    return InkWell(
+      onTap: onTap,
+      // Using focusColor/highlightColor transparent to clean up the tap effect
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          /// --- This is the Top Border Indicator ---
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            margin: EdgeInsets.only(bottom: 10.h), // Space between bar and icon
+            height: 5.h, // Thickness of the line
+            width: 35.w, // Width of the line
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.initColors().primaryColor
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(2.r),
             ),
-            SizedBox(height: 2.h),
-            SvgPicture.asset(
-              selectedIcon,
-              height: 20.h,
+          ),
+          SizedBox(height: 2.h),
+          SvgPicture.asset(
+            selectedIcon,
+            height: 20.h,
+            color: isSelected
+                ? AppColors.initColors().primaryColor
+                : AppColors.initColors().bottomNavigationBarUnselectColor,
+          ),
+          SizedBox(height: 2.h),
+          Text(
+            name ?? '',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: AppDimensions.kFontSize10,
+              letterSpacing: AppDimensions.kLetterSpacing12(-2.5),
+              height: AppDimensions.kLineHeight12(18),
               color: isSelected
                   ? AppColors.initColors().primaryColor
                   : AppColors.initColors().bottomNavigationBarUnselectColor,
             ),
-            SizedBox(height: 2.h),
-            Text(
-              name ?? '',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: AppDimensions.kFontSize10,
-                letterSpacing: AppDimensions.kLetterSpacing12(-2.5),
-                height: AppDimensions.kLineHeight12(18),
-                color: isSelected
-                    ? AppColors.initColors().primaryColor
-                    : AppColors.initColors().bottomNavigationBarUnselectColor,
-              ),
-            ),
-            // Added small padding at bottom to keep text from touching the edge
-          ],
-        ),
+          ),
+          // Added small padding at bottom to keep text from touching the edge
+        ],
       ),
     );
   }

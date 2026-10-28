@@ -1,4 +1,7 @@
-part of 'skils_bloc.dart';
+abstract class SkilsEvent {
+  const SkilsEvent();
+}
 
-@immutable
-sealed class SkilsEvent {}
+class FetchSkilsData extends SkilsEvent {}
+
+class FetchExperienceData extends SkilsEvent {}
