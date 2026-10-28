@@ -1,0 +1,8 @@
+{
+  "name": "@dmp Portfolio App",
+  "description": "Professional mobile and full-stack developer portfolio for DMP Dissanayake featuring skills, featured projects, education, and technical showcase.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
